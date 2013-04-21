@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.1
+* @version  0.0.2
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -121,7 +121,7 @@
 		}
 	}
 
-	// Run Function once after last call
+	// Run Function one time after last call
 	F.once = function(ms) {
 		var s, args, t = this
 		return function() {
@@ -132,13 +132,17 @@
 	}
 
 	// Maximum call rate for Function
-	F.rate = function(ms) {
-		var t = this, n = 0
+	F.rate = function(ms, last_call) {
+		var tick, args, t = this, next = 0
 		return function() {
-			var d = +new Date()
-			if (d > n) {
-				n = d + ms
+			var now = +new Date()
+			clearTimeout(tick)
+			if (now > next) {
+				next = now + ms
 				t.apply(null, arguments)
+			} else if (last_call) {
+				args = arguments
+				tick = setTimeout(function(){t.apply(null, args)}, next-now)
 			}
 		}
 	}

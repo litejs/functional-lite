@@ -1,0 +1,1 @@
+Fn.Iter=Fn.Items={each:function(a){this.items.forEach(a,this);return this},map:function(a){return this.items.map(a,this)},pluck:function(a){return this.items.map(function(b){return b.get(a)},this)},at:function(a,b){var c=this.items[a];return b?(c&&b.call(this,c),this):c},first:function(a){return this.at(0,a)},on_empty:function(a){0 in this.items||a();return this}};

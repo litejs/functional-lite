@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.2
+* @version  0.0.3
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -261,47 +261,6 @@
 		return Fn(this)
 	}
 
-
-
-	// String extensions
-	// -----------------
-
-
-	S.format = function(m) {
-		var a = typeof m == "object" ? m : arguments
-		return this.replace(/\{(\w+)\}/g, function(_, i){return a[i]})
-	}
-
-	S.safe = function() {
-		return this
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/\"/g, "&quot;")
-	}
-
-	S.toAccuracy = N.toAccuracy = function(a) {
-		var x = (""+a).split("."), n = ~~((this/a)+.5) * a
-		return ""+(1 in x ? n.toFixed(x[1].length) : n)
-	}
-
-	N.words = S.words = function(steps, units, strings, overflow) {
-		var n = +this
-		, i = 0
-		, s = strings || {"default":"{0} {1}{2}"}
-
-		while(n>steps[i])n/=steps[i++]
-		if (i == steps.length && overflow) return overflow(this)
-		i=units[i]
-		n=(n+.5)|0
-		return (s[n<2?i:i+"s"]||s["default"]).format(n, i, n<2?"":"s")
-	}
-
-	S.humanSize = N.humanSize = N.words.partial([1024,1024,1024],["byte","KB","MB","GB"])
-	S.humanTime = N.humanTime = N.words.partial([60,60,24,7,30],["second","minute","hour","day","week","month"])
-
-
-
 }(this)
 
 
@@ -462,24 +421,7 @@ test.done();
 !function(){
 var test = new TestCase("String extensions");
 
-test.compare(
-"Hello {0}!".format("world")
-, "Hello world!"
-, "Hello {0}!\nHello {1}!".format("world {1}", "moon {0}")
-, "Hello world {1}!\nHello moon {0}!"
-, "String.format()");
 
-test.compare(
-"background-color".camelCase()
-, "backgroundColor"
-, "String.camelCase()");
-
-test.compare(
-"71".toAccuracy(5)
-, "70"
-, "12.31".toAccuracy(0.2)
-, "12.4"
-, "String.toAccuracy()");
 
 test.compare(
 (4294967295).int2ip()

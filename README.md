@@ -8,7 +8,7 @@ Fn
 
 Experimental Functional stuff.
 Download [compressed][1] 
-(3573 bytes, 1553 bytes gzipped)
+(2790 bytes, 1194 bytes gzipped)
 or [uncompressed][2] source.
 
 

@@ -8,6 +8,7 @@
 */
 
 
+function Nop(){}
 
 !function(root) {
 	var fns = {}
@@ -17,7 +18,6 @@
 	, sl = F.call.bind(A.slice)
 	, cs = []
 
-	function Nop(){}
 
 
 
@@ -35,56 +35,56 @@
 	}
 
 	F.partial = function() {
-		var t = this, a = sl(arguments)
-		return function() {return t.apply(this, A.concat.apply(a, arguments))}
+		var self = this, a = sl(arguments)
+		return function() {return self.apply(this, A.concat.apply(a, arguments))}
 	}
 
 	F.byWords = function(i) {
-		var t = this
+		var self = this
 		i |= 0
 		return function() {
 			var s = this, r = s, a = arguments
-			;(a[i]||"").replace(/[-\w]+/g, function(w){a[i]=w;r=t.apply(s, a)})
+			;(a[i]||"").replace(/[-\w]+/g, function(w){a[i]=w;r=self.apply(s, a)})
 			return r
 		}
 	}
 
 	F.byKeyVal = function() {
-		var t = this
+		var self = this
 		return function(o) {
 			var r, s = this, a = sl(arguments)
 			if (typeof o == "object") for (r in o) {
 				a[0] = r
 				a[1] = o[r]
-				r = t.apply(s, a)
-			} else r = t.apply(s, a)
+				r = self.apply(s, a)
+			} else r = self.apply(s, a)
 			return r
 		}
 	}
 
 	// Run function once and return cached value or cached instance
 	F.cache = function(instance, keyFn, cache) {
-		var t = this, c = cache || {}, f = function() {
+		var self = this, c = cache || {}, f = function() {
 			var a = arguments
 			, i = !!instance || this instanceof f
-			, k = keyFn ? keyFn(a, t) : i + ":" + a.length + ":" + A.join.call(a)
+			, k = keyFn ? keyFn(a, self) : i + ":" + a.length + ":" + A.join.call(a)
 
-			return k in c ? c[k] : (c[k] = i ? t.construct(a) : t.apply(this, a))
+			return k in c ? c[k] : (c[k] = i ? self.construct(a) : self.apply(this, a))
 		}
-		f.origin = t
+		f.origin = self
 		f.cached = c
 		f.extend = function() {
-			return t.extend.apply(t, arguments).cache(instance, keyFn, c)
+			return self.extend.apply(self, arguments).cache(instance, keyFn, c)
 		}
-		f[P] = t[P] // prototype for better access on extending 
+		f[P] = self[P] // prototype for better access on extending 
 		return f
 	}
 
 	F.extend = function() {
-		var a, t = this, i = 0, f = function() {
-			return t.apply(this, arguments)
+		var a, self = this, i = 0, f = function() {
+			return self.apply(this, arguments)
 		}
-		f[P] = Object.create(t[P])
+		f[P] = Object.create(self[P])
 		f[P].constructor = f
 		while (a = arguments[i++]) Object.merge(f[P], a)
 		return f
@@ -102,47 +102,47 @@
 	}
 
 	F.guard = function(test, or) {
-		var t = this
+		var self = this
 		, f = test.fn()
 		, o = (or||Nop).fn()
 
 		return function() {
-			return (f.apply(this, arguments) ? t : o).apply(this, arguments)
+			return (f.apply(this, arguments) ? self : o).apply(this, arguments)
 		}
 	}
 	*/
 
 	// Time to live - Run *fun* if Function not called on time
 	F.ttl = function(ms, fun) {
-		var t = this, s = setTimeout(function(){ms=0;fun&&fun()}, ms)
+		var self = this, tick = setTimeout(function(){ms=0;fun&&fun()}, ms)
 		return function() {
-			clearTimeout(s)
-			ms && t.apply(null, arguments)
+			clearTimeout(tick)
+			ms && self.apply(null, arguments)
 		}
 	}
 
 	// Run Function one time after last call
 	F.once = function(ms) {
-		var s, args, t = this
+		var tick, args, self = this
 		return function() {
-			clearTimeout(s)
+			clearTimeout(tick)
 			args = arguments
-			s = setTimeout(function(){t.apply(null, args)}, ms)
+			tick = setTimeout(function(){self.apply(null, args)}, ms)
 		}
 	}
 
 	// Maximum call rate for Function
 	F.rate = function(ms, last_call) {
-		var tick, args, t = this, next = 0
+		var tick, args, self = this, next = 0
 		return function() {
 			var now = +new Date()
 			clearTimeout(tick)
 			if (now > next) {
 				next = now + ms
-				t.apply(null, arguments)
+				self.apply(null, arguments)
 			} else if (last_call) {
 				args = arguments
-				tick = setTimeout(function(){t.apply(null, args)}, next-now)
+				tick = setTimeout(function(){self.apply(null, args)}, next-now)
 			}
 		}
 	}
@@ -156,16 +156,16 @@
 
 	/** debug.trace
 	F.trace = function(n) {
-		var t = this
-		n = n || t
+		var self = this
+		n = n || self
 		return "console" in w ?
 			function() {
 			console.info('[', n, 'apply(', this!=w && this, ',', arguments, ')')
-				var result = t.apply(this, arguments)
+				var result = self.apply(this, arguments)
 				console.info(']', n, ' -> ', result)
 				return result
 		} :
-		t
+		self
 	}
 	//*/
 
@@ -202,12 +202,12 @@
 	// Non-standard
 	// // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = function() {
-		var t = this
-		, l = t.length
+		var self = this
+		, l = self.length
 		, o = sl(arguments)
 
-		while (l--) if (~o.indexOf(t[l])) t.splice(l, 1)
-		return t
+		while (l--) if (~o.indexOf(self[l])) self.splice(l, 1)
+		return self
 	}
 
 	A.each = A.forEach
@@ -247,14 +247,13 @@
 	root.Fn = Fn
 
 
-	Fn.Nop = Nop
-	Fn.This = F.fn = function() {return this}
 	Fn.True = function() {return true}
 	Fn.False = function() {return false}
 	Fn.Init = function() {
-		var t = this
-		return t.init && t.init.apply(t, arguments) || t
+		var self = this
+		return self.init && self.init.apply(self, arguments) || self
 	}
+	Fn.This = F.fn = function() {return this}
 
 
 	S.fn = function() {

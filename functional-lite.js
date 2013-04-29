@@ -2,13 +2,16 @@
 
 
 /*
-* @version  0.0.3
+* @version  0.0.4
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
 
 
-function Nop(){}
+function Nop()   {}
+function True()  { return true  }
+function False() { return false }
+function This()  { return this  }
 
 !function(root) {
 	var fns = {}
@@ -247,13 +250,11 @@ function Nop(){}
 	root.Fn = Fn
 
 
-	Fn.True = function() {return true}
-	Fn.False = function() {return false}
 	Fn.Init = function() {
 		var self = this
 		return self.init && self.init.apply(self, arguments) || self
 	}
-	Fn.This = F.fn = function() {return this}
+	F.fn = This
 
 
 	S.fn = function() {

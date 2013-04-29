@@ -12,6 +12,7 @@ Download [compressed][1]
 or [uncompressed][2] source.
 
 
+[![Build Status](https://travis-ci.org/litejs/functional-lite.png?branch=master)](https://travis-ci.org/litejs/functional-lite)
 
 ### Licence
 

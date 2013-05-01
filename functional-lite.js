@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.4
+* @version  0.0.5
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */

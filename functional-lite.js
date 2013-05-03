@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.7
+* @version  0.0.8
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -211,9 +211,10 @@ function Init()  {
 		var self = this
 		, l = self.length
 		, o = sl(arguments)
+		, last_id = -1
 
-		while (l--) if (~o.indexOf(self[l])) self.splice(l, 1)
-		return self
+		while (l--) if (~o.indexOf(self[l])) self.splice(last_id = l, 1)
+		return last_id
 	}
 
 	A.each = A.forEach

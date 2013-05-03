@@ -56,6 +56,7 @@ var Fn2 = Fn1.extend({d:1})
 var found = 0
 , arr = [1,2,3,4,2,5]
 , res
+, temp
 , failed = []
 , out = 
 	[ JSON.stringify(Object.zip(["a","b"], [1, 2])),
@@ -76,8 +77,8 @@ var found = 0
 		'_>10'.some([1,2,3]), false,
 
 
-		[1,2,3,2,1].remove(2).join(), "1,3,1",
-		['1',2,3,2,1].remove(2,1).join(), "1,3",
+		(temp = [1,2,3,2,1], temp.remove(2), temp.join()), "1,3,1",
+		(temp = ['1',2,3,2,1], temp.remove(2,1), temp.join()), "1,3",
 
 		"a" in f1, true,
 		"b" in f1, true,

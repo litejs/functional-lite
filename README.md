@@ -8,7 +8,7 @@ Functional
 
 Experimental Functional stuff.
 Download [compressed][1] 
-(2777 bytes, 1187 bytes gzipped)
+(2781 bytes, 1193 bytes gzipped)
 or [uncompressed][2] source.
 
 

@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.1.0
+* @version  0.0.7
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -18,8 +18,7 @@ function Init()  {
 }
 
 !function(root) {
-	var fns = {}
-	, P = "prototype"
+	var P = "prototype"
 	, A = Array[P], D = Date[P], F = Function[P], N = Number[P], S = String[P]
 	, O = Object
 	, sl = F.call.bind(A.slice)

@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.8
+* @version  0.0.9
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -80,7 +80,7 @@ function Init()  {
 		f.origin = self
 		f.cached = c
 		f.extend = function() {
-			return self.extend.apply(self, arguments).cache(instance, keyFn, c)
+			return self.extend.apply(self, arguments).cache(instance, keyFn)
 		}
 		f[P] = self[P] // prototype for better access on extending 
 		return f

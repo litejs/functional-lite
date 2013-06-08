@@ -20,7 +20,7 @@ Examples
 
 Extends String and Function with "every filter each map fold foldr some"
 
-```
+```javascript
 // _ is default first argument name when no arguments defined
 
 "_ + 1".map([1, 2, 3])

@@ -1,6 +1,10 @@
 
-[1]: https://raw.github.com/litejs/fn-lite/master/min.js
-[2]: https://raw.github.com/litejs/fn-lite/master/fn-lite.js
+[1]: https://raw.github.com/litejs/fn-lite/master/min.functional.js
+[2]: https://raw.github.com/litejs/fn-lite/master/functional.js
+
+
+    @version  0.0.11
+    @date     2013-07-13
 
 
 Functional
@@ -8,7 +12,7 @@ Functional
 
 Experimental Functional stuff.
 Download [compressed][1] 
-(2781 bytes, 1196 bytes gzipped)
+(2781 bytes, 1207 bytes gzipped)
 or [uncompressed][2] source.
 
 

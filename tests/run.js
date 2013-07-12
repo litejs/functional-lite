@@ -2,7 +2,7 @@
 
 process.chdir( process.argv[1].replace(/[^/]+$/, "") )
 
-require("../functional-lite.js")
+require("../functional.js")
 
 function async(fn) {
 	var t = this

@@ -184,6 +184,8 @@ function Init()  {
 		if (obj) for (key in obj) obj.hasOwnProperty(key) && fn.call(scope, obj[key], key, obj)
 	}
 
+	// Object.assign ( target, source ) in ECMAScript
+
 	O.merge = function(main) {
 		var k, o, i = 1
 		while (o = arguments[i++]) for (k in o) if (o.hasOwnProperty(k)) main[k] = o[k]

@@ -1,19 +1,30 @@
 {
-	"name": "functional-lite",
-	"version": "0.0.12",
-	"license": "MIT",
-	"description": "Functional Javascript",
-	"main": "functional.js",
-	"author": "Lauri Rooden <lauri@rooden.ee>",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/litejs/functional-lite.git"
-	},
-	"bugs": {
-		"url": "https://github.com/litejs/functional-lite/issues"
-	},
-	"keywords": [
-		"litejs"
-	],
-	"readmeFilename": "README.md"
+  "name": "functional-lite",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Functional Javascript",
+  "main": "index.js",
+  "author": "Lauri Rooden <lauri@rooden.ee>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/litejs/functional-lite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/litejs/functional-lite/issues"
+  },
+  "keywords": [
+    "litejs"
+  ],
+  "scripts": {
+    "build": "node node_modules/buildman/index.js --all",
+    "test": "node tests/run.js"
+  },
+  "devDependencies": {
+    "buildman": "*",
+    "testman": "*"
+  },
+  "buildman": {
+    "min.js": "index.js"
+  },
+  "readmeFilename": "README.md"
 }

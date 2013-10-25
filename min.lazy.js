@@ -1,1 +1,0 @@
-Fn.Lazy={wait:function(e){var b,a=this,f=[],d=[];e=e||[];for(b in a)"function"==typeof a[b]&&-1==e.indexOf(b)&&!function(c){d.push(c);a[c]=function(){f.push([c,arguments]);return a}}(b);a.resume=function(){delete a.resume;for(var c,b=d.length;b--;)delete a[d[b]];for(;c=f[++b];)a[c[0]].apply(a,c[1]);a=f=d=null};return a}};

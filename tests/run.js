@@ -1,8 +1,7 @@
 
 
-process.chdir( process.argv[1].replace(/[^/]+$/, "") )
 
-require("../functional.js")
+require("../")
 
 function async(fn) {
 	var t = this

@@ -2,7 +2,7 @@
 
 
 /*
-* @version  0.0.12
+* @version  0.1.1
 * @author   Lauri Rooden - https://github.com/litejs/fn-lite
 * @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
 */
@@ -184,12 +184,27 @@ function Init()  {
 		if (obj) for (key in obj) obj.hasOwnProperty(key) && fn.call(scope, obj[key], key, obj)
 	}
 
-	// Object.assign ( target, source ) in ECMAScript
+	// Object.assign ( target, source ) in ECMAScript 6
 
-	O.merge = function(main) {
+	O.merge = function(target, source) {
 		var k, o, i = 1
-		while (o = arguments[i++]) for (k in o) if (o.hasOwnProperty(k)) main[k] = o[k]
-		return main
+		while (o = arguments[i++]) for (k in o) if (o.hasOwnProperty(k)) target[k] = o[k]
+		return target
+	}
+
+	O.deepMerge = function(target, source, path, changed, key, val) {
+		path = path || ""
+		changed = changed || []
+
+		for (key in source) if (source.hasOwnProperty(key) && target[key] !== source[key]) {
+			val = source[key]
+			changed.push(path+key)
+			if (val === null) delete target[key]
+			else if (typeof val == "object" && typeof target[key] == "object")
+				O.deepMerge(target[key], val, path+key+".", changed)
+			else target[key] = val
+		}
+		return changed
 	}
 
 	O.zip = function(keys, vals) {

@@ -16,7 +16,10 @@ async.prototype.wait = function() {
 	return this.cb
 }
 
-
+function sum(a, b) {
+	return a + b
+}
+var sum5 = sum.partial(5)
 
 
 
@@ -87,7 +90,7 @@ describe ("Functional").
 
 		equal('_>2'.some([1,2,3]), true).
 		equal('_>10'.some([1,2,3]), false).
-	it ("should pass").
+	it ("should pass function scope tests").
 
 
 		equal((temp = [1,2,3,2,1], temp.remove(2), temp.join()), "1,3,1").
@@ -174,6 +177,9 @@ describe ("Functional").
 				cb()
 			}, 3)
 		}).
+	it ( "should have partial" ).
+		equal(sum5(1), 6).
+		equal(sum5(13), 18).
 done()
 
 

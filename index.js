@@ -2,10 +2,13 @@
 
 
 /*
-* @version  0.1.1
-* @author   Lauri Rooden - https://github.com/litejs/fn-lite
-* @license  MIT License  - http://lauri.rooden.ee/mit-license.txt
+* @version    0.1.2
+* @date       2014-01-21
+* @stability  2 - Unstable
+* @author     Lauri Rooden <lauri@rooden.ee>
+* @license    MIT License
 */
+
 
 
 function Nop()   {}
@@ -19,7 +22,7 @@ function Init()  {
 
 !function(root) {
 	var P = "prototype"
-	, A = Array[P], D = Date[P], F = Function[P], N = Number[P], S = String[P]
+	, A = Array[P], F = Function[P], S = String[P]
 	, O = Object
 	, sl = F.call.bind(A.slice)
 	, cs = []
@@ -42,7 +45,7 @@ function Init()  {
 
 	F.partial = function() {
 		var self = this, a = sl(arguments)
-		return function() {return self.apply(this, A.concat.apply(a, arguments))}
+		return function() {return self.apply(this, a.concat.apply(a, arguments))}
 	}
 
 	F.byWords = function(i) {
@@ -96,28 +99,6 @@ function Init()  {
 		return f
 	}
 
-	/*
-
-	F.chain = function(a) {
-		return "a b->->b.call(this,a.apply(this,arguments))".fold(Array.isArray(a) ? a : sl(arguments), this)
-	}
-
-	F.compose = function() {
-		var a = [this].concat(sl(arguments)), t = a.pop()
-		return t.chain(a)
-	}
-
-	F.guard = function(test, or) {
-		var self = this
-		, f = test.fn()
-		, o = (or||Nop).fn()
-
-		return function() {
-			return (f.apply(this, arguments) ? self : o).apply(this, arguments)
-		}
-	}
-	*/
-
 	// Time to live - Run *fun* if Function not called on time
 	F.ttl = function(ms, fun) {
 		var self = this, tick = setTimeout(function(){ms=0;fun&&fun()}, ms)
@@ -152,31 +133,6 @@ function Init()  {
 			}
 		}
 	}
-
-
-	/**
-	 * Returns a function identical to this function except that
-	 * it prints its arguments on entry and its return value on exit.
-	 * This is useful for debugging function-level programs.
-	 */
-
-	/** debug.trace
-	F.trace = function(n) {
-		var self = this
-		n = n || self
-		return "console" in w ?
-			function() {
-			console.info('[', n, 'apply(', this!=w && this, ',', arguments, ')')
-				var result = self.apply(this, arguments)
-				console.info(']', n, ' -> ', result)
-				return result
-		} :
-		self
-	}
-	//*/
-
-
-	
 
 	
 	// Non-standard

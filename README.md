@@ -1,10 +1,14 @@
 
 [1]: https://raw.github.com/litejs/fn-lite/master/min.js
 [2]: https://raw.github.com/litejs/fn-lite/master/index.js
+[npm-package]: https://npmjs.org/package/functional-lite
 
 
-    @version  0.0.12
-    @date     2013-07-22
+
+    @version    0.1.2
+    @date       2014-01-21
+    @stability  2 - Unstable
+
 
 
 Functional
@@ -33,6 +37,14 @@ Extends String and Function with "every filter each map fold foldr some"
 [1, 2, 3].map(Fn("_ + 1"))
 // [2, 3, 4]
 ```
+
+
+External links
+--------------
+
+-   [npm-package][]
+-   [rfc-6570][]
+
 
 ### Licence
 

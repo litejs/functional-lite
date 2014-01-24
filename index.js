@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.1.2
-* @date       2014-01-21
+* @version    0.1.3
+* @date       2014-01-24
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -156,7 +156,7 @@ function Init()  {
 			val = source[key]
 			changed.push(path+key)
 			if (val === null) delete target[key]
-			else if (typeof val == "object" && typeof target[key] == "object")
+			else if (typeof val == "object" && target[key] && typeof target[key] == "object")
 				O.deepMerge(target[key], val, path+key+".", changed)
 			else target[key] = val
 		}

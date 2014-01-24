@@ -68,13 +68,25 @@ describe ("Functional").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').
 	it ("should have Object.deepMerge").
 		run(function(){
-			a = {a:"A"}
-			b = {b:"B"}
+			a = { a:"A"
+				, b:null
+				, c:"C"
+				, d:null
+				, e:{ea:"EA", eb:null, ec:"EC", ed:null}
+				, f:null
+				, g:{ga:1}
+			}
+			b = { b:"B"
+				, c:null
+				, e: {eb:"EB", ec:null}
+				, f: {fa:1}
+				, g: null
+				}
 			c = Object.deepMerge(a, b)
 		}).
-		equal(JSON.stringify(a), '{"a":"A","b":"B"}').
-		equal(JSON.stringify(b), '{"b":"B"}').
-		equal(JSON.stringify(c), '["b"]').
+		equal(JSON.stringify(a), '{"a":"A","b":"B","d":null,"e":{"ea":"EA","eb":"EB","ed":null},"f":{"fa":1}}').
+		equal(JSON.stringify(b), '{"b":"B","c":null,"e":{"eb":"EB","ec":null},"f":{"fa":1},"g":null}').
+		equal(JSON.stringify(c), '["b","c","e","e.eb","e.ec","f","g"]').
 	it ("should eval stings").
 		equal('->1'.fn()(), 1).
 		equal('x -> x + 1'.fn()(1), 2).

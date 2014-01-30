@@ -44,7 +44,6 @@ External links
 --------------
 
 -   [npm-package][]
--   [rfc-6570][]
 
 
 ### Licence

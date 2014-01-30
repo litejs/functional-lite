@@ -1,6 +1,11 @@
 
-[1]: https://raw.github.com/litejs/fn-lite/master/min.js
-[2]: https://raw.github.com/litejs/fn-lite/master/index.js
+[Build]:    http://img.shields.io/travis/litejs/functional-lite.png
+[Coverage]: http://img.shields.io/coveralls/litejs/functional-lite.png
+[Gittip]:   http://img.shields.io/gittip/lauriro.png
+[1]: https://travis-ci.org/litejs/functional-lite
+[2]: https://coveralls.io/r/litejs/functional-lite
+[3]: https://www.gittip.com/lauriro/
+
 [npm-package]: https://npmjs.org/package/functional-lite
 
 
@@ -11,15 +16,11 @@
 
 
 
-Functional
+Functional &ndash; [![Build][]][1] [![Coverage][]][2] [![Gittip][]][3]
 ==========
 
 Experimental Functional stuff.
-Download [compressed][1] 
-or [uncompressed][2] source.
 
-
-[![Build Status](https://travis-ci.org/litejs/functional-lite.png?branch=master)](https://travis-ci.org/litejs/functional-lite)
 
 
 Examples

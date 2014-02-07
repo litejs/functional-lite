@@ -15,7 +15,8 @@
 		at: function(index, fn) {
 			var t = this
 			, item = t.items[index]
-			return fn ? (item && fn.call(t, item), t) : item
+			//return fn ? (item && fn.call(t, item), t) : item
+			return fn ? (fn.call(t, item ? null:"Item not found", item), t) : item
 		},
 		first: function(fn) {
 			return this.at(0, fn)

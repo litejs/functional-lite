@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.1.3
-* @date       2014-01-24
+* @version    0.1.4
+* @date       2014-02-07
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -146,6 +146,14 @@ function Init()  {
 		var k, o, i = 1
 		while (o = arguments[i++]) for (k in o) if (o.hasOwnProperty(k)) target[k] = o[k]
 		return target
+	}
+
+	O.clone = function(obj, temp, key) {
+		if(!obj || typeof obj != "object") return obj
+		temp = new obj.constructor(obj); // changed
+
+		for (key in obj) if (obj.hasOwnProperty(key)) temp[key] = O.clone(obj[key])
+		return temp
 	}
 
 	O.deepMerge = function(target, source, path, changed, key, val) {

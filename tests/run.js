@@ -192,6 +192,24 @@ describe ("Functional").
 	it ( "should have partial" ).
 		equal(sum5(1), 6).
 		equal(sum5(13), 18).
+
+describe ( "Object" ).
+	it ( "should have clone" ).
+		ok("clone" in Object).
+	it ( "should clone Dates" ).
+		ok(function(){
+			var d1 = new Date()
+			d1.setDate(1)
+			var d2 = Object.clone(d1)
+			return +d1 == +d2
+		}).
+		ok(function(){
+			var d1 = new Date()
+			var d2 = Object.clone(d1)
+			d1.setDate(1)
+			return +d1 != +d2
+		}).
+		
 done()
 
 

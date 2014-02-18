@@ -1,5 +1,6 @@
 
 
+require("browser-upgrade-lite")
 
 require("../")
 

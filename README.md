@@ -10,8 +10,8 @@
 
 
 
-    @version    0.1.4
-    @date       2014-02-07
+    @version    0.2.0
+    @date       2014-02-18
     @stability  2 - Unstable
 
 

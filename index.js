@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.1.4
-* @date       2014-02-07
+* @version    0.2.0
+* @date       2014-02-18
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -40,7 +40,7 @@ function Init()  {
 		* return new(F.bind.apply(this, A.concat.apply([null], a)))
 		*/
 		var l = a.length
-		return l ? (cs[l] || (cs[l] = Fn("t a->new t(a["+Object.keys(sl(a)).join("],a[")+"])")))(this, a) : new this
+		return l ? (cs[l] || (cs[l] = Fn("t a->new t(a["+O.keys(sl(a)).join("],a[")+"])")))(this, a) : new this
 	}
 
 	F.partial = function() {
@@ -73,13 +73,16 @@ function Init()  {
 
 	// Run function once and return cached value or cached instance
 	F.cache = function(instance, keyFn, cache) {
-		var self = this, c = cache || {}, f = function() {
+		var self = this
+		, c = cache || {}
+		, f = function() {
 			var a = arguments
 			, i = !!instance || this instanceof f
-			, k = keyFn ? keyFn(a, self) : i + ":" + a.length + ":" + A.join.call(a)
+			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + A.join.call(a)
 
 			return k in c ? c[k] : (c[k] = i ? self.construct(a) : self.apply(this, a))
 		}
+
 		f.origin = self
 		f.cached = c
 		f.extend = function() {
@@ -90,18 +93,22 @@ function Init()  {
 	}
 
 	F.extend = function() {
-		var a, self = this, i = 0, f = function() {
+		var a
+		, self = this
+		, i = 0
+		, f = function() {
 			return self.apply(this, arguments)
 		}
-		f[P] = Object.create(self[P])
+		f[P] = O.create(self[P])
 		f[P].constructor = f
-		while (a = arguments[i++]) Object.merge(f[P], a)
+		while (a = arguments[i++]) O.merge(f[P], a)
 		return f
 	}
 
 	// Time to live - Run *fun* if Function not called on time
 	F.ttl = function(ms, fun) {
-		var self = this, tick = setTimeout(function(){ms=0;fun&&fun()}, ms)
+		var self = this
+		, tick = setTimeout(function(){ms=0;fun&&fun()}, ms)
 		return function() {
 			clearTimeout(tick)
 			ms && self.apply(null, arguments)
@@ -143,20 +150,30 @@ function Init()  {
 	// Object.assign ( target, source ) in ECMAScript 6
 
 	O.merge = function(target, source) {
-		var k, o, i = 1
-		while (o = arguments[i++]) for (k in o) if (o.hasOwnProperty(k)) target[k] = o[k]
+		for (var k, i = 1; source = arguments[i++];)
+			for (k in source) if (source.hasOwnProperty(k)) target[k] = source[k]
 		return target
 	}
 
-	O.clone = function(obj, temp, key) {
-		if(!obj || typeof obj != "object") return obj
-		temp = new obj.constructor(obj); // changed
+	// Note: use for Object literals only,
+	// as it returns false for custom objects,
+	// like new Date or new YourCustomObject.
 
-		for (key in obj) if (obj.hasOwnProperty(key)) temp[key] = O.clone(obj[key])
-		return temp
+	function isObject(obj) {
+		return obj && obj.constructor === O
 	}
 
-	O.deepMerge = function(target, source, path, changed, key, val) {
+	O.clone = function(source, temp, key) {
+		if (isObject(source)) {
+			temp = {}
+			for (key in source) if (source.hasOwnProperty(key))
+				temp[key] = O.clone(source[key])
+			source = temp
+		}
+		return source
+	}
+
+	O.deepMerge = O.deepCopy = function(target, source, path, changed, key, val) {
 		path = path || ""
 		changed = changed || []
 
@@ -164,7 +181,7 @@ function Init()  {
 			val = source[key]
 			changed.push(path+key)
 			if (val === null) delete target[key]
-			else if (typeof val == "object" && target[key] && typeof target[key] == "object")
+			else if (isObject(val) && isObject(target[key]))
 				O.deepMerge(target[key], val, path+key+".", changed)
 			else target[key] = val
 		}

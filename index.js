@@ -2,7 +2,7 @@
 
 
 /*
-* @version    0.2.0
+* @version    0.2.1
 * @date       2014-02-18
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
@@ -78,7 +78,7 @@ function Init()  {
 		, f = function() {
 			var a = arguments
 			, i = !!instance || this instanceof f
-			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + A.join.call(a)
+			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + sl(a)
 
 			return k in c ? c[k] : (c[k] = i ? self.construct(a) : self.apply(this, a))
 		}

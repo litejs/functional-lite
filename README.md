@@ -6,11 +6,13 @@
 [2]: https://coveralls.io/r/litejs/functional-lite
 [3]: https://www.gittip.com/lauriro/
 
+[7]: https://ci.testling.com/litejs/functional-lite.png
+[8]: https://ci.testling.com/litejs/functional-lite
 [npm-package]: https://npmjs.org/package/functional-lite
 
 
 
-    @version    0.2.0
+    @version    0.2.1
     @date       2014-02-18
     @stability  2 - Unstable
 
@@ -38,6 +40,10 @@ Extends String and Function with "every filter each map fold foldr some"
 [1, 2, 3].map(Fn("_ + 1"))
 // [2, 3, 4]
 ```
+
+### Browser Support
+
+[![browser support][7]][8]
 
 
 External links

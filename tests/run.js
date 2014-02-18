@@ -154,17 +154,27 @@ describe ("Functional").
 		equal(f4 instanceof Fn4, true).
 
 
-		equal(fn(2), 4, ++run, actual).
-		equal(fn(2), 4, run, actual).
-		equal(fn(3), 9, ++run, actual).
-		equal(fn(3), 9, run, actual).
-		equal(fn(3,1), 9, ++run, actual).
-		equal(fn(3,1), 9, run, actual).
+		equal(fn(2), 4).
+		equal(++run, actual).
+		equal(fn(2), 4).
+		equal(run, actual).
+		equal(fn(3), 9).
+		equal(++run, actual).
+		equal(fn(3), 9).
+		equal(run, actual).
+		equal(fn(3,1), 9).
+		equal(++run, actual).
+		equal(fn(3,1), 9).
+		equal(run, actual).
 
-		equal(new fn(), new fn(), ++run, actual).
-		equal(new fn(1, 2), new fn(1, 2), ++run, actual).
-		equal(fn2(), new fn2(), ++run, actual).
-		equal(new fn2(1, 2), fn2(1, 2), ++run, actual).
+		equal(new fn(), new fn()).
+		equal(++run, actual).
+		equal(new fn(1, 2), new fn(1, 2)).
+		equal(++run, actual).
+		equal(fn2(), new fn2()).
+		equal(++run, actual).
+		equal(new fn2(1, 2), fn2(1, 2)).
+		equal(++run, actual).
 
 
 	it ("should pass async tests").

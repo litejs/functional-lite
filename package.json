@@ -1,6 +1,6 @@
 {
   "name": "functional-lite",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "stability": 2,
   "license": "MIT",
   "author": "Lauri Rooden <lauri@rooden.ee>",
@@ -28,5 +28,54 @@
   },
   "buildman": {
     "min.js": "index.js"
+  },
+  "testling": {
+    "files": "tests/run.js",
+    "browsers": {
+      "ie": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "ff": [
+        3,
+        4,
+        5,
+        20,
+        25,
+        "nightly"
+      ],
+      "chrome": [
+        4,
+        10,
+        20,
+        30,
+        31,
+        "canary"
+      ],
+      "safari": [
+        4,
+        5.1,
+        6
+      ],
+      "opera": [
+        10,
+        11,
+        "11.6",
+        12,
+        "next"
+      ],
+      "android-browser": [
+        4.2
+      ],
+      "iphone": [
+        6
+      ],
+      "ipad": [
+        6
+      ]
+    }
   }
 }

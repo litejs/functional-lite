@@ -11,15 +11,6 @@
 
 
 
-function Nop()   {}
-function True()  { return true  }
-function False() { return false }
-function This()  { return this  }
-function Init()  {
-	var self = this
-	return self.init && self.init.apply(self, arguments) || self
-}
-
 !function(root) {
 	var P = "prototype"
 	, A = Array[P], F = Function[P], S = String[P]
@@ -229,7 +220,9 @@ function Init()  {
 	}.byWords()("every filter each map fold foldr some")
 
 
-	F.fn = This
+	F.fn = function() {
+		return this
+	}
 
 	S.fn = function() {
 		return Fn(this)

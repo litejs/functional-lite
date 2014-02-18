@@ -1,8 +1,10 @@
 
 
-require("browser-upgrade-lite")
+var up = require("browser-upgrade-lite")
+, JSON = global.JSON = up.JSON
+, Fn = require("../")
 
-require("../")
+
 
 function async(fn) {
 	var t = this

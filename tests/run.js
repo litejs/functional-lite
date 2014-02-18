@@ -1,6 +1,7 @@
 
 
-var up = require("browser-upgrade-lite")
+var undef
+, up = require("browser-upgrade-lite")
 , JSON = global.JSON = up.JSON
 , Fn = require("../")
 
@@ -52,7 +53,8 @@ var Fn2 = Fn1.extend({d:1})
 	actual++;
 	return i*i;
 }.cache()
-, fn2 = fn.origin.cache(true);
+, fn2 = fn.origin.cache(true)
+, fn3 = fn2.extend({"Fn3": true})
 
 
 
@@ -69,6 +71,23 @@ require("testman").
 describe ("Functional").
 	it ("should have Object.zip").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').
+	it ("should have Object.clone").
+		ok(function(){
+			var obj = { a:1, b:2 }
+			, clone = Object.clone(obj)
+
+			return obj !== clone && JSON.stringify(obj) == JSON.stringify(clone)
+		}).
+	it ("should have Object.each").
+		ok(function(){
+			var obj = { a:1, b:2 }
+			, out = ""
+
+			Object.each(obj, function(val, key){
+				out += key + val
+			})
+			return out == "a1b2"
+		}).
 	it ("should have Object.deepMerge").
 		run(function(){
 			a = { a:"A"
@@ -178,6 +197,13 @@ describe ("Functional").
 		equal(++run, actual).
 		equal(new fn2(1, 2), fn2(1, 2)).
 		equal(++run, actual).
+
+		ok(function(){
+			return sum.fn() === sum
+		}).
+		equal(fn().Fn3, undef).
+		equal(fn2().Fn3, undef).
+		equal(fn3().Fn3, true).
 
 
 	it ("should pass async tests").

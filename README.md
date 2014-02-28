@@ -1,19 +1,21 @@
+[GitHub repo]: https://github.com/litejs/functional-lite
+[npm module]: https://npmjs.org/package/functional-lite
 
-[Build]:    http://img.shields.io/travis/litejs/functional-lite.png
-[Coverage]: http://img.shields.io/coveralls/litejs/functional-lite.png
-[Gittip]:   http://img.shields.io/gittip/lauriro.png
+[Build]:    https://img.shields.io/travis/litejs/functional-lite.png
+[Coverage]: https://img.shields.io/coveralls/litejs/functional-lite.png
+[Gittip]:   https://img.shields.io/gittip/lauriro.png
+
 [1]: https://travis-ci.org/litejs/functional-lite
 [2]: https://coveralls.io/r/litejs/functional-lite
 [3]: https://www.gittip.com/lauriro/
 
 [7]: https://ci.testling.com/litejs/functional-lite.png
 [8]: https://ci.testling.com/litejs/functional-lite
-[npm-package]: https://npmjs.org/package/functional-lite
 
 
 
-    @version    0.2.1
-    @date       2014-02-18
+    @version    0.2.2
+    @date       2014-02-28
     @stability  2 - Unstable
 
 
@@ -49,7 +51,8 @@ Extends String and Function with "every filter each map fold foldr some"
 External links
 --------------
 
--   [npm-package][]
+-   [GitHub repo][]
+-   [npm module][]
 
 
 ### Licence

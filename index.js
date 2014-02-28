@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.2.1
-* @date       2014-02-18
+* @version    0.2.2
+* @date       2014-02-28
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -148,7 +148,7 @@
 
 	// Note: use for Object literals only,
 	// as it returns false for custom objects,
-	// like new Date or new YourCustomObject.
+	// like new Date or new YourObject.
 
 	function isObject(obj) {
 		return obj && obj.constructor === O
@@ -172,8 +172,10 @@
 			val = source[key]
 			changed.push(path+key)
 			if (val === null) delete target[key]
-			else if (isObject(val) && isObject(target[key]))
+			else if (isObject(val)) {
+				if (!isObject(target[key])) target[key] = {}
 				O.deepMerge(target[key], val, path+key+".", changed)
+			}
 			else target[key] = val
 		}
 		return changed
@@ -234,7 +236,6 @@
 	* Modifyed by Lauri Rooden
 	*/
 	function Fn(expr) {
-		if (Fn[expr]) return Fn[expr]
 		var args = "_"
 		, body = expr
 		, arr = expr.split("->")
@@ -244,10 +245,10 @@
 			args = arr.pop().match(/\w+/g)||""
 			arr.length && arr.push("(function("+args+"){return("+body+")})")
 		}
-		return Fn[expr] = new Function(args, "return(" + body + ")")
+		return new Function(args, "return(" + body + ")")
 	}
 
-	root.Fn = Fn
+	root.Fn = Fn.cache()
 
 }(this)
 

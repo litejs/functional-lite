@@ -108,12 +108,22 @@ describe ("Functional").
 		}).
 		equal(JSON.stringify(a), '{"a":"A","b":"B","d":null,"e":{"ea":"EA","eb":"EB","ed":null},"f":{"fa":1}}').
 		equal(JSON.stringify(b), '{"b":"B","c":null,"e":{"eb":"EB","ec":null},"f":{"fa":1},"g":null}').
-		equal(JSON.stringify(c), '["b","c","e","e.eb","e.ec","f","g"]').
+		equal(JSON.stringify(c), '["b","c","e","e.eb","e.ec","f","f.fa","g"]').
 	it ("should eval stings").
-		equal('->1'.fn()(), 1).
-		equal('x -> x + 1'.fn()(1), 2).
-		equal('x y -> x + 2*y'.fn()(1, 2), 5).
-		equal('x, y -> x + 2*y'.fn()(1, 2), 5).
+		equal(' -> 3'.fn()(), 3).
+		equal('-> 3'.fn()(), 3).
+		equal(' ->3'.fn()(), 3).
+		equal('->3'.fn()(), 3).
+		equal('x -> x + 5'.fn()(3), 8).
+		equal('x-> x + 5'.fn()(3), 8).
+		equal('x ->x + 5'.fn()(3), 8).
+		equal('x->x + 5'.fn()(3), 8).
+		equal(' x y -> x + 2*y'.fn()(3, 2), 7).
+		equal('x y -> x + 2*y'.fn()(3, 2), 7).
+		equal('x , y -> x + 2*y'.fn()(3, 2), 7).
+		equal('x, y -> x + 2*y'.fn()(3, 2), 7).
+		equal('x ,y -> x + 2*y'.fn()(3, 2), 7).
+		equal('x,y -> x + 2*y'.fn()(3, 2), 7).
 		equal('_ + 1'.fn()(1), 2).
 		equal('x -> y -> x + 2*y'.fn()(1)(2), 5).
 		equal('x -> y -> z -> x + 2*y+3*z'.fn()(1)(2)(3), 14).

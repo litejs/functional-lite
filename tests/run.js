@@ -3,7 +3,7 @@
 var undef
 , up = require("browser-upgrade-lite")
 , JSON = global.JSON = up.JSON
-, Fn = require("../")
+, Fn = require("../").Fn
 
 
 
@@ -216,15 +216,14 @@ describe ("Functional").
 		equal(fn3().Fn3, true).
 
 
-	it ("should pass async tests").
+	it ("should have Function.rate()").
 		run(function(){
-			var cb = this.wait()
-			, count1 = 0, count2 = 0
-			, add1 = function(){ count1++ }.rate(100)
-			, add2 = function(){ count2++ }.rate(100, 1)
+			var t = this
+			, add1 = function(){ t.count1++ }.rate(100)
+			, add2 = function(){ t.count2++ }.rate(100, 1)
 
-			found++
-			found++
+			t.count1 = 0
+			t.count2 = 0
 
 			function call(cb, i) {
 				add1()
@@ -232,12 +231,45 @@ describe ("Functional").
 				setTimeout( i ? function(){call(cb, i-1)} : cb, 40)
 			}
 
-			call(function(){
-				if (count1 != 2) failed.push("Function.rate(100) = "+count1)
-				if (count2 != 3) failed.push("Function.rate(100, 1) = "+count2)
-				cb()
-			}, 3)
+			call(t.wait(), 3)
 		}).
+		equal(Fn("this.count1"), 2).
+		equal(Fn("this.count2"), 3).
+	it ("should have Function.once()").
+		run(function(){
+			var t = this
+			, cb = t.wait()
+			, add = function(){ t.count3++ }.once(10)
+			t.count3 = 0
+
+			add()
+			add()
+
+			setTimeout(function(){
+				add()
+				add()
+				cb()
+			}, 20)
+		}).
+		equal(Fn("this.count3"), 1).
+
+	it ("should have Function.ttl()").
+		run(function(){
+			var t = this
+			, cb = t.wait()
+			, add4 = function(){ t.count4++ }
+			, add5 = function(){ t.count5++ }.ttl(10, add4)
+
+			t.count4 = 0
+			t.count5 = 0
+
+			add5()
+
+			setTimeout(cb, 20)
+		}).
+		equal(Fn("this.count4"), 0).
+		equal(Fn("this.count5"), 1).
+
 	it ( "should have partial" ).
 		equal(sum5(1), 6).
 		equal(sum5(13), 18).

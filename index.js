@@ -2,7 +2,7 @@
 
 
 /*
-* @version    0.2.2
+* @version    0.2.3
 * @date       2014-02-28
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
@@ -39,12 +39,21 @@
 		return function() {return self.apply(this, a.concat.apply(a, arguments))}
 	}
 
-	F.byWords = function(i) {
+	/*
+	* **argi** - index of argument, which will be split
+	* **re**   - optional RegExp for matching words
+	*/
+
+	F.byWords = function(argi, re) {
 		var self = this
-		i |= 0
 		return function() {
-			var s = this, r = s, a = arguments
-			;(a[i]||"").replace(/[-\w]+/g, function(w){a[i]=w;r=self.apply(s, a)})
+			var s = this
+			, r = s
+			, a = arguments
+			;(a[argi |= 0]||"").replace(re || /\S+/g, function(w) {
+				a[argi] = w
+				r = self.apply(s, a)
+			})
 			return r
 		}
 	}

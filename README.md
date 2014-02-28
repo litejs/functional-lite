@@ -7,20 +7,19 @@
 
 [1]: https://travis-ci.org/litejs/functional-lite
 [2]: https://coveralls.io/r/litejs/functional-lite
-[3]: https://www.gittip.com/lauriro/
 
 [7]: https://ci.testling.com/litejs/functional-lite.png
 [8]: https://ci.testling.com/litejs/functional-lite
 
 
 
-    @version    0.2.2
+    @version    0.2.3
     @date       2014-02-28
     @stability  2 - Unstable
 
 
 
-Functional &ndash; [![Build][]][1] [![Coverage][]][2] [![Gittip][]][3]
+Functional &ndash; [![Build][]][1] [![Coverage][]][2]
 ==========
 
 Experimental Functional stuff.

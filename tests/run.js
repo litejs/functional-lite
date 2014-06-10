@@ -284,6 +284,20 @@ describe ( "Object" ).
 			var d2 = Object.clone(d1)
 			return d1 === d2
 		}).
+describe ( "Array" ).
+	it ( "should have remove" ).
+		equal([1,2,3].remove(1), 0).
+		equal([1,2,3].remove(2), 1).
+		equal([1,2,3].remove(3), 2).
+		equal([1,2,3].remove(4), -1).
+	it ( "should have uniq" ).
+		equal(""+[1,2,3,4,5].uniq(), "1,2,3,4,5").
+		equal(""+[1,2,4,3,4,5].uniq(), "1,2,3,4,5").
+		equal(""+[1,2,4,3,4,5,4].uniq(), "1,2,3,5,4").
+	it ( "should have pushUniq" ).
+		equal([1,2,3].pushUniq(1), false).
+		equal([1,2,3].pushUniq(5), 4).
+
 done()
 
 

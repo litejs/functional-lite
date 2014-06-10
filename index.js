@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.2.3
-* @date       2014-02-28
+* @version    0.2.4
+* @date       2014-06-10
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -96,12 +96,12 @@
 		var a
 		, self = this
 		, i = 0
-		, f = function() {
+		function f() {
 			return self.apply(this, arguments)
 		}
-		f[P] = O.create(self[P])
+
+		for (f[P] = O.create(self[P]); a = arguments[i++];) O.merge(f[P], a)
 		f[P].constructor = f
-		while (a = arguments[i++]) O.merge(f[P], a)
 		return f
 	}
 
@@ -141,7 +141,7 @@
 		}
 	}
 
-	
+
 	// Non-standard
 	O.each = function(obj, fn, scope, key) {
 		if (obj) for (key in obj) obj.hasOwnProperty(key) && fn.call(scope, obj[key], key, obj)
@@ -208,19 +208,25 @@
 	// Non-standard
 	// // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = function() {
-		var self = this
-		, l = self.length
+		var arr = this
+		, l = arr.length
 		, o = sl(arguments)
-		, last_id = -1
+		, lastId = -1
 
-		while (l--) if (~o.indexOf(self[l])) self.splice(last_id = l, 1)
-		return last_id
+		for (;l--;) if (~o.indexOf(arr[l])) arr.splice(lastId = l, 1)
+		return lastId
 	}
 
 	A.each = A.forEach
 	A.fold = A.reduce
 	A.foldr = A.reduceRight
-	A.unique = A.filter.partial(function(s,i,a){return i == a.lastIndexOf(s)})
+	// uniq
+	// last item preserved
+	A.uniq = A.filter.partial(function(s,i,a){return i == a.lastIndexOf(s)})
+
+	A.pushUniq = function(item) {
+		return this.indexOf(item) == -1 ? this.push(item) : false
+	}
 
 	!function(n) {
 		F[n] = S[n] = function() {

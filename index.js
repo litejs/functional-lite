@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.2.4
-* @date       2014-06-10
+* @version    0.2.6
+* @date       2014-06-17
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -15,9 +15,9 @@
 	var P = "prototype"
 	, A = Array[P], F = Function[P], S = String[P]
 	, O = Object
-	, sl = F.call.bind(A.slice)
-	, cs = []
-
+	, hasOwn = O[P].hasOwnProperty
+	, slice = F.call.bind(A.slice)
+	, constructFns = []
 
 
 
@@ -26,16 +26,16 @@
 
 
 	F.construct = function(a) {
-		/*
-		* bind version have bad performance and memory consumption
-		* return new(F.bind.apply(this, A.concat.apply([null], a)))
-		*/
-		var l = a.length
-		return l ? (cs[l] || (cs[l] = Fn("t a->new t(a["+O.keys(sl(a)).join("],a[")+"])")))(this, a) : new this
+		// bind version have bad performance and memory consumption
+		// return new(F.bind.apply(this, A.concat.apply([null], a)))
+		var len = a.length
+		return len ?
+			(constructFns[len] || (constructFns[len] = Fn("t a->new t(a["+O.keys(slice(a)).join("],a[")+"])")))(this, a) :
+			new this
 	}
 
 	F.partial = function() {
-		var self = this, a = sl(arguments)
+		var self = this, a = slice(arguments)
 		return function() {return self.apply(this, a.concat.apply(a, arguments))}
 	}
 
@@ -61,7 +61,7 @@
 	F.byKeyVal = function() {
 		var self = this
 		return function(o) {
-			var r, s = this, a = sl(arguments)
+			var r, s = this, a = slice(arguments)
 			if (typeof o == "object") for (r in o) {
 				a[0] = r
 				a[1] = o[r]
@@ -78,7 +78,7 @@
 		, f = function() {
 			var a = arguments
 			, i = !!instance || this instanceof f
-			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + sl(a)
+			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + slice(a)
 
 			return k in c ? c[k] : (c[k] = i ? self.construct(a) : self.apply(this, a))
 		}
@@ -105,10 +105,10 @@
 		return f
 	}
 
-	// Time to live - Run *fun* if Function not called on time
-	F.ttl = function(ms, fun) {
+	// Time to live - Run *onTimeout* if Function not called on time
+	F.ttl = function(ms, onTimeout) {
 		var self = this
-		, tick = setTimeout(function(){ms=0;fun&&fun()}, ms)
+		, tick = setTimeout(function(){ms=0;onTimeout&&onTimeout()}, ms)
 		return function() {
 			clearTimeout(tick)
 			ms && self.apply(null, arguments)
@@ -117,7 +117,8 @@
 
 	// Run Function one time after last call
 	F.once = function(ms) {
-		var tick, args, self = this
+		var tick, args
+		, self = this
 		return function() {
 			clearTimeout(tick)
 			args = arguments
@@ -127,7 +128,8 @@
 
 	// Maximum call rate for Function
 	F.rate = function(ms, last_call) {
-		var tick, args, self = this, next = 0
+		var tick, args
+		, self = this, next = 0
 		return function() {
 			var now = +new Date()
 			clearTimeout(tick)
@@ -144,14 +146,14 @@
 
 	// Non-standard
 	O.each = function(obj, fn, scope, key) {
-		if (obj) for (key in obj) obj.hasOwnProperty(key) && fn.call(scope, obj[key], key, obj)
+		if (obj) for (key in obj) hasOwn.call(obj, key) && fn.call(scope, obj[key], key, obj)
 	}
 
 	// Object.assign ( target, source ) in ECMAScript 6
 
 	O.merge = function(target, source) {
-		for (var k, i = 1; source = arguments[i++];)
-			for (k in source) if (source.hasOwnProperty(k)) target[k] = source[k]
+		for (var key, i = 1; source = arguments[i++];)
+			for (key in source) if (hasOwn.call(source, key)) target[key] = source[key]
 		return target
 	}
 
@@ -166,7 +168,7 @@
 	O.clone = function(source, temp, key) {
 		if (isObject(source)) {
 			temp = {}
-			for (key in source) if (source.hasOwnProperty(key))
+			for (key in source) if (hasOwn.call(source, key))
 				temp[key] = O.clone(source[key])
 			source = temp
 		}
@@ -177,13 +179,13 @@
 		path = path || ""
 		changed = changed || []
 
-		for (key in source) if (source.hasOwnProperty(key) && target[key] !== source[key]) {
+		for (key in source) if (hasOwn.call(source, key) && target[key] !== source[key]) {
 			val = source[key]
-			changed.push(path+key)
+			changed.push(path + key)
 			if (val === null) delete target[key]
 			else if (isObject(val)) {
 				if (!isObject(target[key])) target[key] = {}
-				O.deepMerge(target[key], val, path+key+".", changed)
+				O.deepMerge(target[key], val, path + key + ".", changed)
 			}
 			else target[key] = val
 		}
@@ -209,11 +211,11 @@
 	// // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = function() {
 		var arr = this
-		, l = arr.length
-		, o = sl(arguments)
+		, len = arr.length
+		, o = slice(arguments)
 		, lastId = -1
 
-		for (;l--;) if (~o.indexOf(arr[l])) arr.splice(lastId = l, 1)
+		for (;len--;) if (~o.indexOf(arr[len])) arr.splice(lastId = len, 1)
 		return lastId
 	}
 
@@ -257,8 +259,8 @@
 
 		while (arr.length > 1) {
 			body = arr.pop()
-			args = arr.pop().match(/\w+/g)||""
-			arr.length && arr.push("(function("+args+"){return("+body+")})")
+			args = arr.pop().match(/\w+/g) || ""
+			if (arr.length) arr.push("(function("+args+"){return("+body+")})")
 		}
 		return new Function(args, "return(" + body + ")")
 	}

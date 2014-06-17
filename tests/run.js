@@ -72,21 +72,21 @@ describe ("Functional").
 	it ("should have Object.zip").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').
 	it ("should have Object.clone").
-		ok(function(){
-			var obj = { a:1, b:2 }
+		ok(function() {
+			var obj = { hasOwnProperty:"prop", b:2 }
 			, clone = Object.clone(obj)
 
 			return obj !== clone && JSON.stringify(obj) == JSON.stringify(clone)
 		}).
 	it ("should have Object.each").
-		ok(function(){
-			var obj = { a:1, b:2 }
+		ok(function() {
+			var obj = { hasOwnProperty:"prop", b:2 }
 			, out = ""
 
 			Object.each(obj, function(val, key){
 				out += key + val
 			})
-			return out == "a1b2"
+			return out == "hasOwnPropertypropb2"
 		}).
 	it ("should have Object.deepMerge").
 		run(function(){
@@ -219,8 +219,8 @@ describe ("Functional").
 	it ("should have Function.rate()").
 		run(function(){
 			var t = this
-			, add1 = function(){ t.count1++ }.rate(100)
-			, add2 = function(){ t.count2++ }.rate(100, 1)
+			, add1 = function(){ t.count1++ }.rate(250)
+			, add2 = function(){ t.count2++ }.rate(250, 1)
 
 			t.count1 = 0
 			t.count2 = 0
@@ -228,7 +228,7 @@ describe ("Functional").
 			function call(cb, i) {
 				add1()
 				add2()
-				setTimeout( i ? function(){call(cb, i-1)} : cb, 40)
+				setTimeout( i ? function(){call(cb, i-1)} : cb, 100)
 			}
 
 			call(t.wait(), 3)

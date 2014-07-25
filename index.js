@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.2.6
-* @date       2014-06-17
+* @version    0.2.7
+* @date       2014-07-25
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -35,8 +35,11 @@
 	}
 
 	F.partial = function() {
-		var self = this, a = slice(arguments)
-		return function() {return self.apply(this, a.concat.apply(a, arguments))}
+		var self = this
+		, a = slice(arguments)
+		return function() {
+			return self.apply(this, a.concat.apply(a, arguments))
+		}
 	}
 
 	/*
@@ -61,7 +64,9 @@
 	F.byKeyVal = function() {
 		var self = this
 		return function(o) {
-			var r, s = this, a = slice(arguments)
+			var r
+			, s = this
+			, a = slice(arguments)
 			if (typeof o == "object") for (r in o) {
 				a[0] = r
 				a[1] = o[r]
@@ -96,6 +101,7 @@
 		var a
 		, self = this
 		, i = 0
+
 		function f() {
 			return self.apply(this, arguments)
 		}
@@ -109,6 +115,7 @@
 	F.ttl = function(ms, onTimeout) {
 		var self = this
 		, tick = setTimeout(function(){ms=0;onTimeout&&onTimeout()}, ms)
+
 		return function() {
 			clearTimeout(tick)
 			ms && self.apply(null, arguments)
@@ -243,26 +250,18 @@
 		return this
 	}
 
-	S.fn = function() {
-		return Fn(this)
+	S.fn = function(scope) {
+		return Fn(this, scope)
 	}
 
-	/*
-	* Copyright 2007 by Oliver Steele. MIT License
-	* http://osteele.com/javascripts/functional
-	* Modifyed by Lauri Rooden
-	*/
-	function Fn(expr) {
-		var args = "_"
-		, body = expr
-		, arr = expr.split("->")
-
-		while (arr.length > 1) {
+	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
+	function Fn(expr, scope) {
+		for (var args = "_", body = expr, arr = expr.split("->"); arr.length > 1; ) {
 			body = arr.pop()
 			args = arr.pop().match(/\w+/g) || ""
 			if (arr.length) arr.push("(function("+args+"){return("+body+")})")
 		}
-		return new Function(args, "return(" + body + ")")
+		return new Function(args, (scope ? "with(" + scope + "||{})" : "") + "return(" + body + ")")
 	}
 
 	root.Fn = Fn.cache()

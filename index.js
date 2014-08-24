@@ -2,8 +2,8 @@
 
 
 /*
-* @version    0.2.7
-* @date       2014-07-25
+* @version    0.2.8
+* @date       2014-08-24
 * @stability  2 - Unstable
 * @author     Lauri Rooden <lauri@rooden.ee>
 * @license    MIT License
@@ -18,6 +18,7 @@
 	, hasOwn = O[P].hasOwnProperty
 	, slice = F.call.bind(A.slice)
 	, constructFns = []
+	, fnRe = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|this|arguments|\.\w+|\w+:/g
 
 
 
@@ -261,7 +262,12 @@
 			args = arr.pop().match(/\w+/g) || ""
 			if (arr.length) arr.push("(function("+args+"){return("+body+")})")
 		}
-		return new Function(args, (scope ? "with(" + scope + "||{})" : "") + "return(" + body + ")")
+		// `replace` removes symbols that follow '.',
+		//  precede ':', are 'this' or 'arguments'; and also the insides of
+		//  strings (by a crude test).  `match` extracts the remaining
+		//  symbols.
+		return new Function(args, (scope && (expr = expr.replace(fnRe, "").match(/\b[a-z]\w*|\b_\w+/g)) ?
+			"var " + expr.uniq().join("='',") + "='';with(" + scope + "||{})" : "") + "return(" + body + ")")
 	}
 
 	root.Fn = Fn.cache()

@@ -5,6 +5,7 @@ var undef
 , JSON = global.JSON = up.JSON
 , Fn = require("../").Fn
 
+require("../timing.js")
 
 
 function async(fn) {

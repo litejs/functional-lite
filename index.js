@@ -1,17 +1,17 @@
 
 
 
-/*
-* @version    0.2.8
-* @date       2014-08-24
-* @stability  2 - Unstable
-* @author     Lauri Rooden <lauri@rooden.ee>
-* @license    MIT License
-*/
+/**
+ * @version    0.2.8
+ * @date       2014-08-24
+ * @stability  2 - Unstable
+ * @author     Lauri Rooden <lauri@rooden.ee>
+ * @license    MIT License
+ */
 
 
 
-!function(root) {
+!function(exports) {
 	var P = "prototype"
 	, A = Array[P], F = Function[P], S = String[P]
 	, O = Object
@@ -44,9 +44,9 @@
 	}
 
 	/*
-	* **argi** - index of argument, which will be split
-	* **re**   - optional RegExp for matching words
-	*/
+	 * **argi** - index of argument, which will be split
+	 * **re**   - optional RegExp for matching words
+	 */
 
 	F.byWords = function(argi, re) {
 		var self = this
@@ -110,45 +110,6 @@
 		for (f[P] = O.create(self[P]); a = arguments[i++];) O.merge(f[P], a)
 		f[P].constructor = f
 		return f
-	}
-
-	// Time to live - Run *onTimeout* if Function not called on time
-	F.ttl = function(ms, onTimeout) {
-		var self = this
-		, tick = setTimeout(function(){ms=0;onTimeout&&onTimeout()}, ms)
-
-		return function() {
-			clearTimeout(tick)
-			ms && self.apply(null, arguments)
-		}
-	}
-
-	// Run Function one time after last call
-	F.once = function(ms) {
-		var tick, args
-		, self = this
-		return function() {
-			clearTimeout(tick)
-			args = arguments
-			tick = setTimeout(function(){self.apply(null, args)}, ms)
-		}
-	}
-
-	// Maximum call rate for Function
-	F.rate = function(ms, last_call) {
-		var tick, args
-		, self = this, next = 0
-		return function() {
-			var now = +new Date()
-			clearTimeout(tick)
-			if (now > next) {
-				next = now + ms
-				self.apply(null, arguments)
-			} else if (last_call) {
-				args = arguments
-				tick = setTimeout(function(){self.apply(null, args)}, next-now)
-			}
-		}
 	}
 
 
@@ -270,7 +231,7 @@
 			"var " + expr.uniq().join("='',") + "='';with(" + scope + "||{})" : "") + "return(" + body + ")")
 	}
 
-	root.Fn = Fn.cache()
+	exports.Fn = Fn.cache()
 
 }(this)
 

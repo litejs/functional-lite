@@ -293,8 +293,8 @@ describe ( "Array" ).
 		equal([1,2,3].remove(4), -1).
 	it ( "should have uniq" ).
 		equal(""+[1,2,3,4,5].uniq(), "1,2,3,4,5").
-		equal(""+[1,2,4,3,4,5].uniq(), "1,2,3,4,5").
-		equal(""+[1,2,4,3,4,5,4].uniq(), "1,2,3,5,4").
+		equal(""+[1,2,4,3,4,5].uniq(), "1,2,4,3,5").
+		equal(""+[1,2,4,3,4,5,4].uniq(), "1,2,4,3,5").
 	it ( "should have pushUniq" ).
 		equal([1,2,3].pushUniq(1), false).
 		equal([1,2,3].pushUniq(5), 4).

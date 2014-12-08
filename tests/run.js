@@ -89,27 +89,6 @@ describe ("Functional").
 			})
 			return out == "hasOwnPropertypropb2"
 		}).
-	it ("should have Object.deepMerge").
-		run(function(){
-			a = { a:"A"
-				, b:null
-				, c:"C"
-				, d:null
-				, e:{ea:"EA", eb:null, ec:"EC", ed:null}
-				, f:null
-				, g:{ga:1}
-			}
-			b = { b:"B"
-				, c:null
-				, e: {eb:"EB", ec:null}
-				, f: {fa:1}
-				, g: null
-				}
-			c = Object.deepMerge(a, b)
-		}).
-		equal(JSON.stringify(a), '{"a":"A","b":"B","d":null,"e":{"ea":"EA","eb":"EB","ed":null},"f":{"fa":1}}').
-		equal(JSON.stringify(b), '{"b":"B","c":null,"e":{"eb":"EB","ec":null},"f":{"fa":1},"g":null}').
-		equal(JSON.stringify(c), '["b","c","e","e.eb","e.ec","f","f.fa","g"]').
 	it ("should eval stings").
 		equal(' -> 3'.fn()(), 3).
 		equal('-> 3'.fn()(), 3).

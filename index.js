@@ -2,8 +2,8 @@
 
 
 /**
- * @version    0.2.9
- * @date       2014-11-18
+ * @version    0.3.0
+ * @date       2014-12-08
  * @stability  2 - Unstable
  * @author     Lauri Rooden <lauri@rooden.ee>
  * @license    MIT License
@@ -142,23 +142,6 @@
 			source = temp
 		}
 		return source
-	}
-
-	O.deepMerge = O.deepCopy = function(target, source, path, changed, key, val) {
-		path = path || ""
-		changed = changed || []
-
-		for (key in source) if (hasOwn.call(source, key) && target[key] !== source[key]) {
-			val = source[key]
-			changed.push(path + key)
-			if (val === null) delete target[key]
-			else if (isObject(val)) {
-				if (!isObject(target[key])) target[key] = {}
-				O.deepMerge(target[key], val, path + key + ".", changed)
-			}
-			else target[key] = val
-		}
-		return changed
 	}
 
 	O.zip = function(keys, vals) {

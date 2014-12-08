@@ -8,13 +8,10 @@
 [1]: https://travis-ci.org/litejs/functional-lite
 [2]: https://coveralls.io/r/litejs/functional-lite
 
-[7]: https://ci.testling.com/litejs/functional-lite.png
-[8]: https://ci.testling.com/litejs/functional-lite
 
 
-
-    @version    0.2.9
-    @date       2014-11-18
+    @version    0.3.0
+    @date       2014-12-08
     @stability  2 - Unstable
 
 
@@ -44,7 +41,7 @@ Extends String and Function with "every filter each map fold foldr some"
 
 ### Browser Support
 
-[![browser support][7]][8]
+It should work IE6 and up but automated testing is currently broken.
 
 
 External links
@@ -56,7 +53,7 @@ External links
 
 ### Licence
 
-Copyright (c) 2012 Lauri Rooden &lt;lauri@rooden.ee&gt;  
+Copyright (c) 2013-2014 Lauri Rooden &lt;lauri@rooden.ee&gt;  
 [The MIT License](http://lauri.rooden.ee/mit-license.txt)
 
 

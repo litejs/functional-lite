@@ -11,13 +11,12 @@
 
 
 
-!function(exports) {
+!function(exports, Object) {
 	var P = "prototype"
 	, A = Array[P], F = Function[P], S = String[P]
-	, O = Object
-	, hasOwn = O[P].hasOwnProperty
+	, hasOwn = Object.prototype.hasOwnProperty
 	, slice = F.call.bind(A.slice)
-	, constructFns = []
+	, fns = {}
 	, fnRe = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|this|arguments|\.\w+|\w+:/g
 
 
@@ -26,13 +25,13 @@
 	// -------------------
 
 
-	F.construct = function(a) {
+	F.construct = function(args, len) {
 		// bind version have bad performance and memory consumption
-		// return new(F.bind.apply(this, A.concat.apply([null], a)))
-		var len = a.length
+		// return new(F.bind.apply(this, A.concat.apply([null], args)))
+		len = args.length
 		return len ?
-			(constructFns[len] || (constructFns[len] = Fn("t a->new t(a["+O.keys(slice(a)).join("],a[")+"])")))(this, a) :
-			new this
+		(fns[len] || (fns[len] = Fn("t a->new t(a[" + Object.keys(args).join("],a[") + "])")))(this, args) :
+		new this
 	}
 
 	F.partial = function() {
@@ -107,20 +106,20 @@
 			return self.apply(this, arguments)
 		}
 
-		for (f[P] = O.create(self[P]); a = arguments[i++];) O.merge(f[P], a)
+		for (f[P] = Object.create(self[P]); a = arguments[i++];) Object.merge(f[P], a)
 		f[P].constructor = f
 		return f
 	}
 
 
 	// Non-standard
-	O.each = function(obj, fn, scope, key) {
+	Object.each = function(obj, fn, scope, key) {
 		if (obj) for (key in obj) hasOwn.call(obj, key) && fn.call(scope, obj[key], key, obj)
 	}
 
 	// Object.assign ( target, source ) in ECMAScript 6
 
-	O.merge = function(target, source) {
+	Object.merge = function(target, source) {
 		for (var key, i = 1; source = arguments[i++];)
 			for (key in source) if (hasOwn.call(source, key)) target[key] = source[key]
 		return target
@@ -131,20 +130,21 @@
 	// like new Date or new YourObject.
 
 	function isObject(obj) {
-		return obj && obj.constructor === O
+		return obj && obj.constructor === Object
 	}
 
-	O.clone = function(source, temp, key) {
+	function clone(source, temp, key) {
 		if (isObject(source)) {
 			temp = {}
 			for (key in source) if (hasOwn.call(source, key))
-				temp[key] = O.clone(source[key])
+				temp[key] = clone(source[key])
 			source = temp
 		}
 		return source
 	}
+	Object.clone = clone
 
-	O.zip = function(keys, vals) {
+	Object.zip = function(keys, vals) {
 		return keys.fold(function(_, key, i) {
 			_[key] = vals[i]
 			return _
@@ -201,6 +201,18 @@
 		return Fn(this, scope)
 	}
 
+	function True() {
+		return true
+	}
+
+	function False() {
+		return false
+	}
+
+	Boolean.prototype.fn = function() {
+		return this.valueOf() ? True : False
+	}
+
 	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
 	function Fn(expr, scope) {
 		for (var args = "_", body = expr, arr = expr.split("->"); arr.length > 1; ) {
@@ -218,7 +230,7 @@
 
 	exports.Fn = Fn.cache()
 
-}(this)
+}(this, Object)
 
 
 

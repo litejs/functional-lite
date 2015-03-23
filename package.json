@@ -1,15 +1,22 @@
 {
   "name": "functional-lite",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "stability": 2,
-  "license": "MIT",
   "author": "Lauri Rooden <lauri@rooden.ee>",
+  "license": "MIT",
   "description": "Functional Javascript",
   "keywords": [
     "litejs"
   ],
   "main": "index.js",
   "readmeFilename": "README.md",
+  "files": [
+    "dist",
+    "index.js",
+    "iter.js",
+    "lazy.js",
+    "timing.js"
+  ],
   "scripts": {
     "build": "node node_modules/buildman/index.js --all",
     "travis-test": "istanbul cover ./tests/run.js && (coveralls < coverage/lcov.info || exit 0)",
@@ -25,6 +32,9 @@
     "testman": "*"
   },
   "buildman": {
-    "dist/index-min.js": "index.js"
+    "dist/index-min.js": {
+      "banner": "/*! litejs.com/MIT-LICENSE.txt */",
+      "input": "index.js"
+    }
   }
 }

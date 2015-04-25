@@ -125,6 +125,16 @@
 		return target
 	}
 
+	if (!Array.from) Array.from = arrayFrom
+
+	function arrayFrom(obj) {
+		for (var arr = [], i = 0, len = obj.length; i < len; ) {
+			arr[i] = obj[i++]
+		}
+		return arr
+	}
+
+
 	// Note: use for Object literals only,
 	// as it returns false for custom objects,
 	// like new Date or new YourObject.

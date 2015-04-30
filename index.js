@@ -125,6 +125,7 @@
 		return target
 	}
 
+	/*
 	if (!Array.from) Array.from = arrayFrom
 
 	function arrayFrom(obj) {
@@ -134,6 +135,31 @@
 		return arr
 	}
 
+	Object.values = function(obj) {
+		return Object.keys(obj).map(function(e) {
+			return obj[e]
+		})
+	}
+
+	Object.values({a:1, b:2, c:3}); //[1, 2, 3]
+	Array.prototype.flatten = function(){
+		var arr = this, i = arr.length;
+		while (i--) if (arr[i] instanceof Array)
+			arr[i].unshift(i,1) && arr.splice.apply(arr,arr[i].flatten() )
+		return arr
+	}
+	function argsToArray(){
+		return Array.apply(null, arguments).flatten()
+	}
+	argsToArray([[1],3,[4,5]],2)
+
+	Array.flatten = function(arr) {
+	for(var i=arr.length;i--;)
+	0 in arr[i] && A.splice.apply(arr, [i, 1].concat(Array.flatten(arr[i])))
+	return arr
+	}
+	flat([1,2,[3,4,[5,6]],7])
+	*/
 
 	// Note: use for Object literals only,
 	// as it returns false for custom objects,
@@ -161,16 +187,8 @@
 		}, {})
 	}
 
-	/*
-	Array.flatten = function(arr) {
-	for(var i=arr.length;i--;)
-	0 in arr[i] && A.splice.apply(arr, [i, 1].concat(Array.flatten(arr[i])))
-	return arr
-	}
-	flat([1,2,[3,4,[5,6]],7])
-	*/
 	// Non-standard
-	// // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
+	// IE<9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = function() {
 		var arr = this
 		, len = arr.length

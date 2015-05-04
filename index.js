@@ -17,7 +17,7 @@
 	, hasOwn = Object.prototype.hasOwnProperty
 	, slice = F.call.bind(A.slice)
 	, fns = {}
-	, fnRe = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|this|arguments|\.\w+|\w+:/g
+	, fnRe = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|this|arguments|window|\.\w+|\w+:/g
 
 
 
@@ -189,7 +189,8 @@
 
 	// Non-standard
 	// IE<9 bug: [1,2].splice(0).join("") == "" but should be "12"
-	A.remove = function() {
+	A.remove = arrayRemove
+	function arrayRemove() {
 		var arr = this
 		, len = arr.length
 		, o = slice(arguments)
@@ -243,17 +244,22 @@
 
 	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
 	function Fn(expr, scope) {
-		for (var args = "_", body = expr, arr = expr.split("->"); arr.length > 1; ) {
+		for (var args = ["_"], body = expr, arr = expr.split("->"); arr.length > 1; ) {
 			body = arr.pop()
-			args = arr.pop().match(/\w+/g) || ""
-			if (arr.length) arr.push("(function("+args+"){return("+body+")})")
+			args = arr.pop().match(/\w+/g) || []
+			if (arr.length) arr.push("(function(" + args + "){return(" + body + ")})")
 		}
 		// `replace` removes symbols that follow '.',
 		//  precede ':', are 'this' or 'arguments'; and also the insides of
 		//  strings (by a crude test).  `match` extracts the remaining
 		//  symbols.
 		return new Function(args, (scope && (expr = expr.replace(fnRe, "").match(/\b[a-z]\w*|\b_\w+/g)) ?
-			"var " + expr.uniq().join("='',") + "='';with(" + scope + "||{})" : "") + "return(" + body + ")")
+			(
+				arrayRemove.apply(expr, args),
+				expr[0] ? "var " + expr.uniq().join("='',") + "='';" : ""
+			) + "with(" + scope + "||{})" : "")
+			+ "return(" + body + ")"
+		)
 	}
 
 	exports.Fn = Fn.cache()

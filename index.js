@@ -230,14 +230,6 @@
 		return Fn(this, scope)
 	}
 
-	function True() {
-		return true
-	}
-
-	function False() {
-		return false
-	}
-
 	Boolean.prototype.fn = function() {
 		return this.valueOf() ? True : False
 	}
@@ -263,6 +255,14 @@
 	}
 
 	exports.Fn = Fn.cache()
+
+	function True() {
+		return true
+	}
+
+	function False() {
+		return false
+	}
 
 }(this, Object)
 

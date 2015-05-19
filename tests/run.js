@@ -8,25 +8,17 @@ var undef
 require("../timing.js")
 
 
-function async(fn) {
-	var t = this
-	t.pending = 0
-	t.cb = function() {
-		process.nextTick(function(){--t.pending==0&&fn()})
-	}
-}
-
-async.prototype.wait = function() {
-	this.pending++
-	return this.cb
-}
-
 function sum(a, b) {
 	return a + b
 }
 var sum5 = sum.partial(5)
 
+var waitSum = 0
 
+function waitAdd(i) {
+	waitSum += i
+	return this
+}
 
 function Fn1(){
 	var t = this;
@@ -38,10 +30,11 @@ Fn1.prototype = {
 	init: function(){
 		this.b = 1;
 	},
+	add1: waitAdd,
 	c:1
 }
 
-var Fn2 = Fn1.extend({d:1})
+var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.wait})
 , Fn3 = Fn2.extend({init:function(){},e:1})
 , Fn4 = Fn3.extend({init:function(){Fn2.prototype.init.call(this);},f:1})
 , f1 = new Fn1()
@@ -264,6 +257,26 @@ describe ( "Object" ).
 			var d2 = Object.clone(d1)
 			return d1 === d2
 		}).
+	it ( "shold wait object resume" ).
+		ok(f2.add1 === waitAdd).
+		equal(f2, f2.wait()).
+		ok(f2.add1 !== waitAdd).
+		equal(f2, f2.add1(1)).
+		equal(waitSum, 0).
+		equal(f2, f2.add2(2)).
+		equal(waitSum, 0).
+		equal(f2, f2.wait()).
+		ok(f2.add1 !== waitAdd).
+		equal(f2, f2.add1(1)).
+		equal(waitSum, 0).
+		equal(f2, f2.add2(2)).
+		equal(waitSum, 0).
+		equal(f2, f2.resume()).
+		ok(f2.add1 !== waitAdd).
+		equal(waitSum, 0).
+		equal(f2, f2.resume()).
+		ok(f2.add1 === waitAdd).
+		equal(waitSum, 6).
 describe ( "Array" ).
 	it ( "should have remove" ).
 		equal([1,2,3].remove(1), 0).

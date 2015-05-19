@@ -14,7 +14,6 @@
     "dist",
     "index.js",
     "iter.js",
-    "lazy.js",
     "timing.js"
   ],
   "scripts": {

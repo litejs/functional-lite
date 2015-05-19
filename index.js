@@ -256,6 +256,39 @@
 
 	exports.Fn = Fn.cache()
 
+	exports.Fn.wait = fnWait
+	function fnWait(ignore) {
+		var k
+		, obj = this
+		, hooks = []
+		, hooked = []
+		ignore = ignore || []
+
+		for (k in obj) if (typeof obj[k] == "function" && obj[k] !== fnWait && ignore.indexOf(k) == -1) !function(k) {
+			hooked.push(k, hasOwn.call(obj, k) && obj[k])
+			obj[k] = function() {
+				hooks.push(k, arguments)
+				return obj
+			}
+		}(k)
+
+		obj.resume = function() {
+			delete obj.resume
+
+			for (var v, i = hooked.length; i--; i--) {
+				if (hooked[i]) obj[hooked[i-1]] = hooked[i]
+				else delete obj[hooked[i-1]]
+			}
+			// i == -1 from previous loop
+			for (; v = hooks[++i]; ) {
+				obj[v].apply(obj, hooks[++i])
+			}
+			hooks = hooked = null
+			return obj
+		}
+		return obj
+	}
+
 	function True() {
 		return true
 	}

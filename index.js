@@ -125,6 +125,12 @@
 		return target
 	}
 
+	Object.values = function(obj) {
+		return Object.keys(obj||{}).map(function(e) {
+			return obj[e]
+		})
+	}
+
 	/*
 	if (!Array.from) Array.from = arrayFrom
 
@@ -135,13 +141,6 @@
 		return arr
 	}
 
-	Object.values = function(obj) {
-		return Object.keys(obj).map(function(e) {
-			return obj[e]
-		})
-	}
-
-	Object.values({a:1, b:2, c:3}); //[1, 2, 3]
 	Array.prototype.flatten = function(){
 		var arr = this, i = arr.length;
 		while (i--) if (arr[i] instanceof Array)

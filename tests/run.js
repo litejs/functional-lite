@@ -257,6 +257,8 @@ describe ( "Object" ).
 			var d2 = Object.clone(d1)
 			return d1 === d2
 		}).
+	it ( "should have Object.values" ).
+		equal(""+Object.values({1:"a",2:"b"}), "a,b").
 	it ( "shold wait object resume" ).
 		ok(f2.add1 === waitAdd).
 		equal(f2, f2.wait()).

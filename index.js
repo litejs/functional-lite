@@ -279,8 +279,8 @@
 				else delete obj[hooked[i-1]]
 			}
 			// i == -1 from previous loop
-			for (; v = hooks[++i]; ) {
-				obj[v].apply(obj, hooks[++i])
+			for (var scope = obj; v = hooks[++i]; ) {
+				scope = scope[v].apply(scope, hooks[++i]) || scope
 			}
 			hooks = hooked = null
 			return obj

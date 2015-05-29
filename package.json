@@ -1,6 +1,6 @@
 {
   "name": "functional-lite",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "stability": 2,
   "author": "Lauri Rooden <lauri@rooden.ee>",
   "license": "MIT",
@@ -26,7 +26,6 @@
     "url": "https://github.com/litejs/functional-lite/issues"
   },
   "devDependencies": {
-    "browser-upgrade-lite": ">=1.0.1",
     "buildman": "*",
     "testman": "*"
   },

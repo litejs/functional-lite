@@ -1,8 +1,6 @@
 
 
 var undef
-, up = require("browser-upgrade-lite")
-, JSON = global.JSON = up.JSON
 , Fn = require("../").Fn
 
 require("../timing.js")
@@ -34,7 +32,7 @@ Fn1.prototype = {
 	c:1
 }
 
-var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.wait})
+var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.hold})
 , Fn3 = Fn2.extend({init:function(){},e:1})
 , Fn4 = Fn3.extend({init:function(){Fn2.prototype.init.call(this);},f:1})
 , f1 = new Fn1()
@@ -52,8 +50,6 @@ var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.wait})
 
 
 
-
-
 var a,b,c
 , found = 0
 , arr = [1,2,3,4,2,5]
@@ -62,6 +58,47 @@ var a,b,c
 , failed = []
 
 require("testman").
+describe ( "Object" ).
+	it ( "should have clone" ).
+		ok("clone" in Object).
+	it ( "should not clone Dates" ).
+		ok(function(){
+			var d1 = new Date()
+			d1.setDate(1)
+			var d2 = Object.clone(d1)
+			return d1 === d2
+		}).
+	it ( "should have Object.values" ).
+		equal(""+Object.values({1:"a",2:"b"}), "a,b").
+	it ( "shold wait object resume" ).
+		ok(f2.add1 === waitAdd).
+		run(function() {
+			this.bla = f2.wait()
+		}).
+		ok(f2.add1 !== waitAdd).
+		equal(f2, f2.add1(1)).
+		equal(waitSum, 0).
+		equal(f2, f2.add2(2)).
+		equal(waitSum, 0).
+		run(function() {
+			this.bla = f2.wait()
+		}).
+		ok(f2.add1 !== waitAdd).
+		equal(f2, f2.add1(1)).
+		equal(waitSum, 0).
+		equal(f2, f2.add2(2)).
+		equal(waitSum, 0).
+		run(function() {
+			this.bla()
+		}).
+		ok(f2.add1 !== waitAdd).
+		equal(waitSum, 0).
+		run(function() {
+			this.bla()
+		}).
+		ok(f2.add1 === waitAdd).
+		equal(waitSum, 6).
+
 describe ("Functional").
 	it ("should have Object.zip").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').
@@ -247,38 +284,6 @@ describe ("Functional").
 		equal(sum5(1), 6).
 		equal(sum5(13), 18).
 
-describe ( "Object" ).
-	it ( "should have clone" ).
-		ok("clone" in Object).
-	it ( "should not clone Dates" ).
-		ok(function(){
-			var d1 = new Date()
-			d1.setDate(1)
-			var d2 = Object.clone(d1)
-			return d1 === d2
-		}).
-	it ( "should have Object.values" ).
-		equal(""+Object.values({1:"a",2:"b"}), "a,b").
-	it ( "shold wait object resume" ).
-		ok(f2.add1 === waitAdd).
-		equal(f2, f2.wait()).
-		ok(f2.add1 !== waitAdd).
-		equal(f2, f2.add1(1)).
-		equal(waitSum, 0).
-		equal(f2, f2.add2(2)).
-		equal(waitSum, 0).
-		equal(f2, f2.wait()).
-		ok(f2.add1 !== waitAdd).
-		equal(f2, f2.add1(1)).
-		equal(waitSum, 0).
-		equal(f2, f2.add2(2)).
-		equal(waitSum, 0).
-		equal(f2, f2.resume()).
-		ok(f2.add1 !== waitAdd).
-		equal(waitSum, 0).
-		equal(f2, f2.resume()).
-		ok(f2.add1 === waitAdd).
-		equal(waitSum, 6).
 describe ( "Array" ).
 	it ( "should have remove" ).
 		equal([1,2,3].remove(1), 0).

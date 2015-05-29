@@ -255,15 +255,35 @@
 
 	exports.Fn = Fn.cache()
 
-	exports.Fn.wait = fnWait
-	function fnWait(ignore) {
+
+
+	function wait(fn) {
+		var pending = 1
+		, lastArgs = []
+		function resume() {
+			var args = arguments
+			if (args.length) lastArgs = args
+			if (!--pending && fn) fn.apply(this, lastArgs)
+		}
+		resume.wait = function() {
+			pending++
+			return resume
+		}
+		return resume
+	}
+	exports.Fn.wait = wait
+
+
+
+	function hold(ignore) {
 		var k
 		, obj = this
 		, hooks = []
 		, hooked = []
-		ignore = ignore || []
+		, _wait = wait(resume)
+		ignore = ignore || obj.syncMethods || []
 
-		for (k in obj) if (typeof obj[k] == "function" && obj[k] !== fnWait && ignore.indexOf(k) == -1) !function(k) {
+		for (k in obj) if (typeof obj[k] == "function" && ignore.indexOf(k) == -1) !function(k) {
 			hooked.push(k, hasOwn.call(obj, k) && obj[k])
 			obj[k] = function() {
 				hooks.push(k, arguments)
@@ -271,22 +291,22 @@
 			}
 		}(k)
 
-		obj.resume = function() {
-			delete obj.resume
+		obj.wait = _wait.wait
+		return _wait
 
-			for (var v, i = hooked.length; i--; i--) {
+		function resume() {
+			for (var v, scope = obj, i = hooked.length; i--; i--) {
 				if (hooked[i]) obj[hooked[i-1]] = hooked[i]
 				else delete obj[hooked[i-1]]
 			}
 			// i == -1 from previous loop
-			for (var scope = obj; v = hooks[++i]; ) {
+			for (; v = hooks[++i]; ) {
 				scope = scope[v].apply(scope, hooks[++i]) || scope
 			}
 			hooks = hooked = null
-			return obj
 		}
-		return obj
 	}
+	exports.Fn.hold = hold
 
 	function True() {
 		return true

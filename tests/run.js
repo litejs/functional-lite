@@ -243,8 +243,8 @@ describe ("Functional").
 
 			call(t.wait(), 3)
 		}).
-		equal(Fn("this.count1"), 2).
-		equal(Fn("this.count2"), 3).
+		ok(Fn("this.count1==2")).
+		ok(Fn("this.count2==3")).
 	it ("should have Function.once()").
 		run(function(){
 			var t = this
@@ -261,7 +261,7 @@ describe ("Functional").
 				cb()
 			}, 20)
 		}).
-		equal(Fn("this.count3"), 1).
+		ok(Fn("this.count3==1")).
 
 	it ("should have Function.ttl()").
 		run(function(){
@@ -277,8 +277,8 @@ describe ("Functional").
 
 			setTimeout(cb, 20)
 		}).
-		equal(Fn("this.count4"), 0).
-		equal(Fn("this.count5"), 1).
+		ok(Fn("this.count4==0")).
+		ok(Fn("this.count5==1")).
 
 	it ( "should have partial" ).
 		equal(sum5(1), 6).

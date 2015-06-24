@@ -25,13 +25,13 @@
 	// -------------------
 
 
-	F.construct = function(args, len) {
+	function construct(fn, args, len) {
 		// bind version have bad performance and memory consumption
 		// return new(F.bind.apply(this, A.concat.apply([null], args)))
 		len = args.length
 		return len ?
-		(fns[len] || (fns[len] = Fn("t a->new t(a[" + Object.keys(args).join("],a[") + "])")))(this, args) :
-		new this
+		(fns[len] || (fns[len] = Fn("t a->new t(a[" + Object.keys(args).join("],a[") + "])")))(fn, args) :
+		new fn
 	}
 
 	F.partial = function() {
@@ -86,7 +86,7 @@
 			, i = !!instance || this instanceof wrapper
 			, k = keyFn ? keyFn.apply(fn, args) : i + ":" + args.length + ":" + slice(args)
 
-			return k in c ? c[k] : (c[k] = i ? fn.construct(args) : fn.apply(this, args))
+			return k in c ? c[k] : (c[k] = i ? construct(fn, args) : fn.apply(this, args))
 		}
 
 		wrapper.extend = function() {

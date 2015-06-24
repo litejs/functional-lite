@@ -35,10 +35,10 @@
 	}
 
 	F.partial = function() {
-		var self = this
-		, a = slice(arguments)
+		var fn = this
+		, args = slice(arguments)
 		return function() {
-			return self.apply(this, a.concat.apply(a, arguments))
+			return fn.apply(this, args.concat.apply(args, arguments))
 		}
 	}
 
@@ -48,67 +48,66 @@
 	 */
 
 	F.byWords = function(argi, re) {
-		var self = this
+		var fn = this
 		return function() {
 			var s = this
-			, r = s
-			, a = arguments
-			;(a[argi |= 0]||"").replace(re || /\S+/g, function(w) {
-				a[argi] = w
-				r = self.apply(s, a)
+			, res = s
+			, args = arguments
+			;(args[argi |= 0]||"").replace(re || /\S+/g, function(w) {
+				args[argi] = w
+				res = fn.apply(s, args)
 			})
-			return r
+			return res
 		}
 	}
 
 	F.byKeyVal = function() {
-		var self = this
+		var fn = this
 		return function(o) {
-			var r
+			var res
 			, s = this
-			, a = slice(arguments)
-			if (typeof o == "object") for (r in o) {
-				a[0] = r
-				a[1] = o[r]
-				r = self.apply(s, a)
-			} else r = self.apply(s, a)
-			return r
+			, args = slice(arguments)
+			if (typeof o == "object") for (res in o) {
+				args[0] = res
+				args[1] = o[res]
+				res = fn.apply(s, args)
+			} else res = fn.apply(s, args)
+			return res
 		}
 	}
 
 	// Run function once and return cached value or cached instance
 	F.cache = function(instance, keyFn, cache) {
-		var self = this
-		, c = cache || {}
-		, f = function() {
-			var a = arguments
-			, i = !!instance || this instanceof f
-			, k = keyFn ? keyFn.apply(self, a) : i + ":" + a.length + ":" + slice(a)
+		var fn = wrapper.origin = this
+		, c = wrapper.cached = cache || {}
 
-			return k in c ? c[k] : (c[k] = i ? self.construct(a) : self.apply(this, a))
+		function wrapper() {
+			var args = arguments
+			, i = !!instance || this instanceof wrapper
+			, k = keyFn ? keyFn.apply(fn, args) : i + ":" + args.length + ":" + slice(args)
+
+			return k in c ? c[k] : (c[k] = i ? fn.construct(args) : fn.apply(this, args))
 		}
 
-		f.origin = self
-		f.cached = c
-		f.extend = function() {
-			return self.extend.apply(self, arguments).cache(instance, keyFn, cache)
+		wrapper.extend = function() {
+			return fn.extend.apply(fn, arguments).cache(instance, keyFn, cache)
 		}
-		f[P] = self[P] // prototype for better access on extending 
-		return f
+		wrapper[P] = fn[P] // prototype for better access on extending
+		return wrapper
 	}
 
 	F.extend = function() {
-		var a
-		, self = this
+		var arg
+		, fn = this
 		, i = 0
 
-		function f() {
-			return self.apply(this, arguments)
+		function wrapper() {
+			return fn.apply(this, arguments)
 		}
 
-		for (f[P] = Object.create(self[P]); a = arguments[i++];) Object.merge(f[P], a)
-		f[P].constructor = f
-		return f
+		for (wrapper[P] = Object.create(fn[P]); arg = arguments[i++];) Object.merge(wrapper[P], arg)
+		wrapper[P].constructor = wrapper
+		return wrapper
 	}
 
 
@@ -214,9 +213,9 @@
 
 	!function(n) {
 		F[n] = S[n] = function() {
-			var a = arguments, l = a[0]
-			a[0] = this.fn()
-			return A[n].apply(l, a)
+			var args = arguments, l = args[0]
+			args[0] = this.fn()
+			return A[n].apply(l, args)
 		}
 	}.byWords()("every filter each map fold foldr some")
 
@@ -280,7 +279,7 @@
 		, obj = this
 		, hooks = []
 		, hooked = []
-		, _wait = wait(resume)
+		, _resume = wait(resume)
 		ignore = ignore || obj.syncMethods || []
 
 		for (k in obj) if (typeof obj[k] == "function" && ignore.indexOf(k) == -1) !function(k) {
@@ -291,8 +290,8 @@
 			}
 		}(k)
 
-		obj.wait = _wait.wait
-		return _wait
+		obj.wait = _resume.wait
+		return _resume
 
 		function resume() {
 			for (var v, scope = obj, i = hooked.length; i--; i--) {

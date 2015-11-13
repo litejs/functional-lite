@@ -98,7 +98,32 @@ describe ( "Object" ).
 		}).
 		ok(f2.add1 === waitAdd).
 		equal(waitSum, 6).
+		run(function() {
+			this.bla()
+		}).
+		ok(f2.add1 === waitAdd).
+		equal(waitSum, 6).
 
+
+
+		ok(function() {
+			this.bla = f2.wait()
+			return this.bla === f2.wait()
+		}).
+		equal(waitSum, 6).
+		equal(f2, f2.add1(1)).
+		equal(waitSum, 6).
+		ok(function() {
+			return this.bla.wait === f2.wait
+		}).
+		run(function() {
+			this.bla()
+			this.bla()
+		}).
+		ok(function() {
+			return this.bla.wait !== f2.wait
+		}).
+		equal(waitSum, 7).
 describe ("Functional").
 	it ("should have Object.zip").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').

@@ -290,7 +290,13 @@
 			}
 		}(k)
 
+		/**
+		 * `wait` is already in hooked array,
+		 * so override hooked method
+		 * that will be cleared on resume.
+		 */
 		obj.wait = _resume.wait
+
 		return _resume
 
 		function resume() {

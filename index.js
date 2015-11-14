@@ -258,11 +258,8 @@
 
 	function wait(fn) {
 		var pending = 1
-		, lastArgs = []
 		function resume() {
-			var args = arguments
-			if (args.length) lastArgs = args
-			if (!--pending && fn) fn.apply(this, lastArgs)
+			if (!--pending && fn) fn.call(this)
 		}
 		resume.wait = function() {
 			pending++

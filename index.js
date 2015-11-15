@@ -211,15 +211,6 @@
 		return this.indexOf(item) == -1 ? this.push(item) : false
 	}
 
-	!function(n) {
-		F[n] = S[n] = function() {
-			var args = arguments, l = args[0]
-			args[0] = this.fn()
-			return A[n].apply(l, args)
-		}
-	}.byWords()("every filter each map fold foldr some")
-
-
 	F.fn = function() {
 		return this
 	}

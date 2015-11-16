@@ -42,40 +42,6 @@
 		}
 	}
 
-	/*
-	 * **argi** - index of argument, which will be split
-	 * **re**   - optional RegExp for matching words
-	 */
-
-	F.byWords = function(argi, re) {
-		var fn = this
-		return function() {
-			var s = this
-			, res = s
-			, args = arguments
-			;(args[argi |= 0]||"").replace(re || /\S+/g, function(w) {
-				args[argi] = w
-				res = fn.apply(s, args)
-			})
-			return res
-		}
-	}
-
-	F.byKeyVal = function() {
-		var fn = this
-		return function(o) {
-			var res
-			, s = this
-			, args = slice(arguments)
-			if (typeof o == "object") for (res in o) {
-				args[0] = res
-				args[1] = o[res]
-				res = fn.apply(s, args)
-			} else res = fn.apply(s, args)
-			return res
-		}
-	}
-
 	// Run function once and return cached value or cached instance
 	F.cache = function(instance, keyFn, cache) {
 		var fn = wrapper.origin = this

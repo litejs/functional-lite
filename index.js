@@ -79,19 +79,23 @@
 
 	// Non-standard
 	Object.each = function(obj, fn, scope, key) {
-		if (obj) for (key in obj) hasOwn.call(obj, key) && fn.call(scope, obj[key], key, obj)
+		if (obj) for (key in obj) {
+			hasOwn.call(obj, key) && fn.call(scope, obj[key], key, obj)
+		}
 	}
 
 	// Object.assign ( target, source ) in ECMAScript 6
-
 	Object.merge = function(target, source) {
-		for (var key, i = 1; source = arguments[i++];)
-			for (key in source) if (hasOwn.call(source, key)) target[key] = source[key]
+		for (var key, i = 1; source = arguments[i++]; ) {
+			for (key in source) if (hasOwn.call(source, key)) {
+				target[key] = source[key]
+			}
+		}
 		return target
 	}
 
 	Object.values = function(obj) {
-		return Object.keys(obj||{}).map(function(e) {
+		return Object.keys(obj || {}).map(function(e) {
 			return obj[e]
 		})
 	}
@@ -136,8 +140,9 @@
 	function clone(source, temp, key) {
 		if (isObject(source)) {
 			temp = {}
-			for (key in source) if (hasOwn.call(source, key))
+			for (key in source) if (hasOwn.call(source, key)) {
 				temp[key] = clone(source[key])
+			}
 			source = temp
 		}
 		return source
@@ -160,7 +165,9 @@
 		, o = slice(arguments)
 		, lastId = -1
 
-		for (;len--;) if (~o.indexOf(arr[len])) arr.splice(lastId = len, 1)
+		for (; len--; ) if (~o.indexOf(arr[len])) {
+			arr.splice(lastId = len, 1)
+		}
 		return lastId
 	}
 

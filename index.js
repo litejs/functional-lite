@@ -198,7 +198,10 @@
 
 	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
 	function Fn(expr, scope) {
-		for (var args = ["_"], body = expr, arr = expr.split("->"); arr.length > 1; ) {
+		var args = []
+		, body = expr
+		, arr = expr.split("->")
+		for (; arr.length > 1; ) {
 			body = arr.pop()
 			args = arr.pop().match(/\w+/g) || []
 			if (arr.length) arr.push("(function(" + args + "){return(" + body + ")})")

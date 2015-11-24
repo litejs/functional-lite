@@ -149,13 +149,6 @@
 	}
 	Object.clone = clone
 
-	Object.zip = function(keys, vals) {
-		return keys.fold(function(_, key, i) {
-			_[key] = vals[i]
-			return _
-		}, {})
-	}
-
 	// Non-standard
 	// IE<9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = arrayRemove

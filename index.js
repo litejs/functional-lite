@@ -161,29 +161,43 @@
 	}
 
 	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
-	function Fn(expr, scope) {
+	function Fn(expr /*, scope, mask1, ..maskN */) {
 		var args = []
-		, body = expr
 		, arr = expr.split("->")
-		for (; arr.length > 1; ) {
-			body = arr.pop()
-			args = arr.pop().match(/\w+/g) || []
-			if (arr.length) arr.push("(function(" + args + "){return(" + body + ")})")
+		, scope = slice(arguments, 1)
+		, key = scope.length + ":" + expr
+		, fn = fns[key]
+
+		if (!fn) {
+			fn = expr.replace(fnRe, "").match(/\b[a-z_$][\w$]*/ig) || []
+			for (; arr.length > 1; ) {
+				expr = arr.pop()
+				args = arr.pop().match(/\w+/g) || []
+				arrayRemove.apply(fn, args)
+				if (arr.length) {
+					arr.push("function(" + args + "){return(" + expr + ")}" + (scope[0] ? ".bind(this)" : ""))
+				}
+			}
+			expr = "return(" + expr + ")"
+
+			if (scope[1]) {
+				arr = Object.keys(scope.slice(1)).map(Fn("a->'Ꙭ'+a"))
+				args.unshift.apply(args, arr)
+				expr = "with(" + arr.join(")with(") + "){" + expr + "}"
+			}
+
+			if (scope[0]) {
+				expr = "with(this){" + expr + "}"
+				if (fn[0]) expr = "var " + fn.uniq().join("='',") + "='';" + expr
+			}
+
+			fn = fns[key] = Function(args, expr)
 		}
-		// `replace` removes symbols that follow '.',
-		//  precede ':', are 'this' or 'arguments'; and also the insides of
-		//  strings (by a crude test).  `match` extracts the remaining
-		//  symbols.
-		return new Function(args, (scope && (expr = expr.replace(fnRe, "").match(/\b[a-z]\w*|\b_\w+/g)) ?
-			(
-				arrayRemove.apply(expr, args),
-				expr[0] ? "var " + expr.uniq().join("='',") + "='';" : ""
-			) + "with(" + scope + "||{})" : "")
-			+ "return(" + body + ")"
-		)
+
+		return scope.length ? fn.bind.apply(fn, scope) : fn
 	}
 
-	exports.Fn = Fn.cache()
+	exports.Fn = Fn
 
 
 

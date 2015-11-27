@@ -47,6 +47,13 @@ var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.hold})
 }.cache()
 , fn2 = fn.origin.cache(true)
 , fn3 = fn2.extend({"Fn3": true})
+, scope = {
+	a: "AA"
+}
+, mask = {
+	b: "BB",
+	global: undef
+}
 
 
 
@@ -323,6 +330,21 @@ describe ( "Array" ).
 		equal([1,2,3].pushUniq(1), false).
 		equal([1,2,3].pushUniq(5), 4).
 
+describe ( "Fn" ).
+it ( "should have scope" ).
+	equal(Fn("this.a", scope)(), "AA").
+	equal(Fn("a->this.a", scope)(), "AA").
+	equal(Fn("a->c->this.a", scope)()(), "AA").
+
+	equal(Fn("this.a+b", scope, mask)(), "AABB").
+	equal(Fn("a->this.a+b", scope, mask)(), "AABB").
+	equal(Fn("a->c->this.a+b", scope, mask)()(), "AABB").
+
+	equal(Fn("c->this.a+b+c", scope, mask)("CC"), "AABBCC").
+	equal(Fn("c->a+b+c", scope, scope, mask)("CC"), "AABBCC").
+	equal(Fn("global")(), global).
+	equal(Fn("global", mask, mask)(), undef).
+	equal(Fn("global", null, mask)(), undef).
 done()
 
 

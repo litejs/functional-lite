@@ -48,7 +48,8 @@ var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.hold})
 , fn2 = fn.origin.cache(true)
 , fn3 = fn2.extend({"Fn3": true})
 , scope = {
-	a: "AA"
+	a: "AA",
+	loginName: "Name"
 }
 , mask = {
 	b: "BB",
@@ -333,6 +334,10 @@ describe ( "Array" ).
 describe ( "Fn" ).
 it ( "should have scope" ).
 	equal(Fn("this.a", scope)(), "AA").
+	equal(Fn("a", scope)(), "AA").
+	equal(Fn("loginName", scope)(), "Name").
+	equal(Fn("loginTime", scope)(), "").
+	equal(Fn("b", scope)(), "").
 	equal(Fn("a->this.a", scope)(), "AA").
 	equal(Fn("a->c->this.a", scope)()(), "AA").
 

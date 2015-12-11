@@ -17,7 +17,7 @@
 	, hasOwn = Object.prototype.hasOwnProperty
 	, slice = F.call.bind(A.slice)
 	, fns = {}
-	, fnRe = /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|\b(?:false|in|new|null|this|true|void)\b|\.\w+|\w+:/g
+	, fnRe = /(['\/"])(?:\\?.)*?\1|\b(?:false|in|new|null|this|true|void)\b|\.\w+|\w+:/g
 
 
 

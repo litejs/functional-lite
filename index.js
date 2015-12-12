@@ -163,7 +163,7 @@
 	// THANKS: Oliver Steele http://www.osteele.com/sources/javascript/functional/
 	function Fn(expr /*, scope, mask1, ..maskN */) {
 		var args = []
-		, arr = expr.split("->")
+		, arr = expr.match(/[^"']+?->|.+$/g)
 		, scope = slice(arguments, 1)
 		, key = scope.length + ":" + expr
 		, fn = fns[key]

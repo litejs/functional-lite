@@ -1,7 +1,7 @@
 
 
 var undef
-, Fn = require("../").Fn
+, Fn = global.Fn = require("../").Fn
 
 require("../timing.js")
 
@@ -48,7 +48,10 @@ var Fn2 = Fn1.extend({d:1, add2: waitAdd, wait: Fn.hold})
 , fn2 = fn.origin.cache(true)
 , fn3 = fn2.extend({"Fn3": true})
 , scope = {
+	Fn: Fn,
 	a: "AA",
+	"class": "C",
+	"if": "D",
 	loginName: "Name"
 }
 , mask = {
@@ -350,6 +353,14 @@ it ( "should have scope" ).
 	equal(Fn("global")(), global).
 	equal(Fn("global", mask, mask)(), undef).
 	equal(Fn("global", null, mask)(), undef).
+
+it ( "should handle recursive Fn-s" ).
+	equal(Fn("A -> Fn('x->x+1')(A)")(2), 3).
+	equal(Fn("A -> Fn('x->x+1')(A)", scope)(2), 3).
+	throws(function() {
+		Fn("A -> Fn('x->x+1')(A)", mask)(2)
+	}).
+
 done()
 
 

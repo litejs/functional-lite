@@ -181,7 +181,7 @@
 			expr = "return(" + expr + ")"
 
 			if (scope[1]) {
-				arr = Object.keys(scope.slice(1)).map(Fn("a->'Ꙭ'+a"))
+				arr = Object.keys(scope.slice(1)).map(Fn("a->'__'+a"))
 				args.unshift.apply(args, arr)
 				expr = "with(" + arr.join(")with(") + "){" + expr + "}"
 			}

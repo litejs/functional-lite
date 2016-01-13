@@ -2,8 +2,8 @@
 
 
 /*
- * @version    0.5.2
- * @date       2015-12-18
+ * @version    0.5.3
+ * @date       2016-01-13
  * @stability  2 - Unstable
  * @author     Lauri Rooden <lauri@rooden.ee>
  * @license    MIT License

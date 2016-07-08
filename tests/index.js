@@ -70,15 +70,6 @@ var a,b,c
 
 require("testman").
 describe ( "Object" ).
-	it ( "should have clone" ).
-		ok("clone" in Object).
-	it ( "should not clone Dates" ).
-		ok(function(){
-			var d1 = new Date()
-			d1.setDate(1)
-			var d2 = Object.clone(d1)
-			return d1 === d2
-		}).
 	it ( "should have Object.values" ).
 		equal(""+Object.values({1:"a",2:"b"}), "a,b").
 	it ( "shold wait object resume" ).
@@ -138,13 +129,6 @@ describe ( "Object" ).
 describe ("Functional").
 	it ("should have Object.zip").
 		equal(JSON.stringify(Object.zip(["a","b"], [1, 2])), '{"a":1,"b":2}').
-	it ("should have Object.clone").
-		ok(function() {
-			var obj = { hasOwnProperty:"prop", b:2 }
-			, clone = Object.clone(obj)
-
-			return obj !== clone && JSON.stringify(obj) == JSON.stringify(clone)
-		}).
 	it ("should have Object.each").
 		ok(function() {
 			var obj = { hasOwnProperty:"prop", b:2 }

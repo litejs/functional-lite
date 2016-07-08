@@ -100,26 +100,6 @@
 		})
 	}
 
-	// Note: use for Object literals only,
-	// as it returns false for custom objects,
-	// like new Date or new YourObject.
-
-	function isObject(obj) {
-		return obj && obj.constructor === Object
-	}
-
-	function clone(source, temp, key) {
-		if (isObject(source)) {
-			temp = {}
-			for (key in source) if (hasOwn.call(source, key)) {
-				temp[key] = clone(source[key])
-			}
-			source = temp
-		}
-		return source
-	}
-	Object.clone = clone
-
 	// Non-standard
 	// IE<9 bug: [1,2].splice(0).join("") == "" but should be "12"
 	A.remove = arrayRemove

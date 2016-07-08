@@ -71,7 +71,9 @@
 			return fn.apply(this, arguments)
 		}
 
-		for (wrapper[P] = Object.create(fn[P]); arg = arguments[i++];) Object.merge(wrapper[P], arg)
+		for (wrapper[P] = Object.create(fn[P]); arg = arguments[i++]; ) {
+			Object.assign(wrapper[P], arg)
+		}
 		wrapper[P].constructor = wrapper
 		return wrapper
 	}
@@ -82,16 +84,6 @@
 		if (obj) for (key in obj) {
 			hasOwn.call(obj, key) && fn.call(scope, obj[key], key, obj)
 		}
-	}
-
-	// Object.assign ( target, source ) in ECMAScript 6
-	Object.merge = function(target, source) {
-		for (var key, i = 1; source = arguments[i++]; ) {
-			for (key in source) if (hasOwn.call(source, key)) {
-				target[key] = source[key]
-			}
-		}
-		return target
 	}
 
 	Object.values = function(obj) {
